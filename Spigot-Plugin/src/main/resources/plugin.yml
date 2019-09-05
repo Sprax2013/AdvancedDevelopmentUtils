@@ -1,0 +1,11 @@
+'name': 'AdvancedDevUtils-Spigot'
+'description': 'Eine, für Minecraft Spigot-Server, erweiterte Version der AdvancedDevUtils
+      von Sprax2013.'
+'version': ${project.version}
+api-version: '1.13'
+'main': 'de.sprax2013.advanced_dev_utils.spigot.Main'
+'authors':
+  - 'Sprax2013'
+'website': 'https://sprax2013.de/'
+'softdepend':
+  - 'ProtocolLib'
