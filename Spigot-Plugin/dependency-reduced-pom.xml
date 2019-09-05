@@ -28,13 +28,30 @@
     <plugins>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>2.4</version>
+        <version>3.2.1</version>
         <executions>
           <execution>
             <phase>package</phase>
             <goals>
               <goal>shade</goal>
             </goals>
+            <configuration>
+              <artifactSet>
+                <includes>
+                  <include>de.sprax2013.adu:base</include>
+                  <include>org.jsoup:jsoup</include>
+                  <include>net.lingala.zip4j:zip4j</include>
+                  <include>dnsjava:dnsjava</include>
+                  <include>org.bstats:bstats-bukkit</include>
+                </includes>
+              </artifactSet>
+              <relocations>
+                <relocation>
+                  <pattern>org.bstats</pattern>
+                  <shadedPattern>de.sprax2013.adu.spigot.bstats</shadedPattern>
+                </relocation>
+              </relocations>
+            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -44,6 +61,14 @@
     <repository>
       <id>dmulloy2-repo</id>
       <url>http://repo.dmulloy2.net/nexus/repository/public/</url>
+    </repository>
+    <repository>
+      <id>CodeMC</id>
+      <url>https://repo.codemc.org/repository/maven-public</url>
+    </repository>
+    <repository>
+      <id>spigot-repo</id>
+      <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
     </repository>
   </repositories>
   <dependencies>
@@ -104,4 +129,3 @@
     </dependency>
   </dependencies>
 </project>
-
