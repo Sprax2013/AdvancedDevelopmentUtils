@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="v1_14_R1" />
+        <module name="api" />
+        <module name="v1_11_R1" />
+        <module name="v1_9_R2" />
+        <module name="v1_9_R1" />
+        <module name="spigot" />
+        <module name="v1_13_R2" />
+        <module name="Base" />
+        <module name="v1_12_R1" />
+        <module name="Spigot-Plugin" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="api" target="1.8" />
+      <module name="Base" target="1.8" />
+      <module name="parent" target="1.8" />
+      <module name="plugin" target="1.8" />
+      <module name="spigot" target="1.8" />
+      <module name="Spigot-Plugin" target="1.8" />
+      <module name="v1_10_R1" target="1.8" />
+      <module name="v1_11_R1" target="1.8" />
+      <module name="v1_12_R1" target="1.8" />
+      <module name="v1_13_R2" target="1.8" />
+      <module name="v1_14_R1" target="1.8" />
+      <module name="v1_9_R1" target="1.8" />
+      <module name="v1_9_R2" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
