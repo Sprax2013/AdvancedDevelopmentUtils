@@ -23,6 +23,7 @@ public class MySQLAPI {
      *
      * @return The connection or null
      *
+     * @throws ClassNotFoundException When the MySQL-Driver could not be found
      * @see #getConnection(String, int, String, String)
      */
     public static Connection getConnection(String host, int port, String username, String password, String database) {
@@ -36,12 +37,9 @@ public class MySQLAPI {
             if (con == null || con.isClosed() || !con.isValid(15)) {
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
-                } catch (ClassNotFoundException ignore) {
-                    // Spigot does use the old one TODO: Put new one inside ADU
-
-                    System.err.println("Could not load MySQL-Driver (" + ignore.getLocalizedMessage()
-                            + ")... Loading the old one instead");
-
+                } catch (ClassNotFoundException ignored) {
+                    // Fallback: The Spigot-Module does not shade the driver - But on older Spigot-Servers they are
+                    // still using the outdated one
                     Class.forName("com.mysql.jdbc.Driver");
                 }
 
