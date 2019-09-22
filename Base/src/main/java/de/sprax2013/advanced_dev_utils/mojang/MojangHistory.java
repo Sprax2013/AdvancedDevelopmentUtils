@@ -24,8 +24,8 @@ public class MojangHistory {
     }
 
     /**
-     * <i>Key</i> => The Java timestamp in milliseconds (changedToAt)<br>
-     * <i>Value</i> => The username
+     * <i>Key</i> =&gt; The Java timestamp in milliseconds (changedToAt)<br>
+     * <i>Value</i> =&gt; The username
      *
      * @return The history-TreeMap. Never null
      */

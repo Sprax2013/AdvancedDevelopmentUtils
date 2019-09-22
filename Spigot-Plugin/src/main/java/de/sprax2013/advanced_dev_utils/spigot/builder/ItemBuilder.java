@@ -304,19 +304,34 @@ public class ItemBuilder {
      * Adds an enchantment. Will remove it (or won't set one) if
      * <i>removeEnchantmentWhenLevelSmaler1</i> = true
      *
-     * @param type                              Enchantment type
-     * @param level                             level of the enchantment
-     * @param removeEnchantmentWhenLevelSmaler1 if true, level < 1 will result in
-     *                                          removing or not setting an
-     *                                          enchantment
+     * @param type                               Enchantment type
+     * @param level                              level of the enchantment
+     * @param removeEnchantmentWhenLevelSmaller1 if true, level < 1 will result in
+     *                                           removing or not setting an
+     *                                           enchantment
      *
      * @return the instantiated ItemBuilder
      */
-    public ItemBuilder addEnchantment(Enchantment type, int level, boolean removeEnchantmentWhenLevelSmaler1) {
-        if (removeEnchantmentWhenLevelSmaler1 && level < 1) {
+    public ItemBuilder addEnchantment(Enchantment type, int level, boolean removeEnchantmentWhenLevelSmaller1) {
+        if (removeEnchantmentWhenLevelSmaller1 && level < 1) {
             getItemMeta().removeEnchant(type);
         } else {
             getItemMeta().addEnchant(type, level, true);
+        }
+
+        return this;
+    }
+
+    /**
+     * Adds multiple enchantments.
+     *
+     * @param enchantments Enchantment type and level
+     *
+     * @return the instantiated ItemBuilder
+     */
+    public ItemBuilder addEnchantments(Map<Enchantment, Integer> enchantments) {
+        for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
+            getItemMeta().addEnchant(entry.getKey(), entry.getValue(), true);
         }
 
         return this;
