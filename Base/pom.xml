@@ -7,7 +7,7 @@
     <parent>
         <groupId>de.sprax2013.adu</groupId>
         <artifactId>parent</artifactId>
-        <version>0.0.1-DEV</version>
+        <version>0.0.1.2-DEV</version>
     </parent>
     <artifactId>base</artifactId>
 

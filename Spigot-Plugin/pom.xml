@@ -7,7 +7,7 @@
     <parent>
         <groupId>de.sprax2013.adu</groupId>
         <artifactId>parent</artifactId>
-        <version>0.0.1-DEV</version>
+        <version>0.0.1.2-DEV</version>
     </parent>
 
     <artifactId>spigot</artifactId>
@@ -97,6 +97,7 @@
         <dependency>
             <groupId>de.sprax2013.adu</groupId>
             <artifactId>v1_12_R1</artifactId>
+            <version>0.0.1.2-DEV</version>
             <scope>compile</scope>
         </dependency>
 

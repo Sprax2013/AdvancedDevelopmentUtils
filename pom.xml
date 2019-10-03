@@ -6,7 +6,7 @@
 
     <groupId>de.sprax2013.adu</groupId>
     <artifactId>parent</artifactId>
-    <version>0.0.1-DEV</version>
+    <version>0.0.1.2-DEV</version>
 
     <packaging>pom</packaging>
 
@@ -17,7 +17,7 @@
         <!--        <module>v1_9_R1</module>-->
         <!--        <module>v1_9_R2</module>-->
         <!--        <module>v1_11_R1</module>-->
-        <!--        <module>v1_12_R1</module>-->
+        <module>v1_12_R1</module>
         <!--        <module>v1_13_R2</module>-->
         <!--        <module>v1_14_R1</module>-->
     </modules>
