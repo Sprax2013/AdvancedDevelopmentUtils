@@ -86,19 +86,18 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
 
-<!--        <repository>-->
-<!--            <id>md_5-repo</id>-->
-<!--            <url>http://repo.md-5.net/content/repositories/public/</url>-->
-<!--        </repository>-->
+        <!--        <repository>-->
+        <!--            <id>md_5-repo</id>-->
+        <!--            <url>http://repo.md-5.net/content/repositories/public/</url>-->
+        <!--        </repository>-->
     </repositories>
 
     <dependencies>
         <!-- Modules -->
-
         <dependency>
             <groupId>de.sprax2013.adu</groupId>
-            <artifactId>base</artifactId>
-            <version>0.0.1-DEV</version>
+            <artifactId>v1_12_R1</artifactId>
+            <scope>compile</scope>
         </dependency>
 
         <!--        <dependency>-->
@@ -143,6 +142,12 @@
             <version>1.8.8-R0.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.sprax2013.adu</groupId>
+            <artifactId>base</artifactId>
+            <version>0.0.1.2-DEV</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>
