@@ -3,6 +3,7 @@ package de.sprax2013.advanced_dev_utils.mojang;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import de.sprax2013.advanced_dev_utils.misc.UUIDUtils;
+import org.jsoup.Connection;
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 
@@ -21,6 +22,8 @@ import java.util.UUID;
  * .sprax2013.de/wikis/home</a>
  */
 public class MojangAPI {
+    public static String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0";
+
     private static HashMap<String, CachedObject> profileCache = new HashMap<>();
 
     private static long lastSpraxAPIProblem = -1;
@@ -73,12 +76,13 @@ public class MojangAPI {
             try {
                 Response res = Jsoup
                         .connect("https://api.sprax2013.de/mojang/history/" + URLEncoder.encode(username, "UTF-8"))
+                        .userAgent(USER_AGENT)
                         .ignoreContentType(true).execute();
 
                 if (res.statusCode() == 200) {
                     result = gson.fromJson(res.body(), MojangHistory.class);
                 }
-            } catch (@SuppressWarnings("unused") SocketTimeoutException ignore) {
+            } catch (SocketTimeoutException ignore) {
                 System.err.println("MojangAPI: Connection to 'api.sprax2013.de' timed out");
                 incrementSpraxAPIProblem();
             } catch (Exception ex) {
@@ -93,7 +97,7 @@ public class MojangAPI {
                 if (username.length() > 16) {
                     try {
                         uuid = UUID.fromString(UUIDUtils.addDashesToUUID(username));
-                    } catch (@SuppressWarnings("unused") Exception ex) {
+                    } catch (Exception ignore) {
                     }
                 } else {
                     MojangUUID uuidObj = getUUID(username);
@@ -108,12 +112,13 @@ public class MojangAPI {
                         Response res = Jsoup
                                 .connect("https://api.mojang.com/user/profiles/"
                                         + URLEncoder.encode(uuid.toString().replace("-", ""), "UTF-8") + "/names")
+                                .userAgent(USER_AGENT)
                                 .ignoreContentType(true).execute();
 
                         if (res.statusCode() == 200) {
                             result = gson.fromJson(res.body(), MojangHistory.class);
                         }
-                    } catch (@SuppressWarnings("unused") SocketTimeoutException ignore) {
+                    } catch (SocketTimeoutException ignore) {
                         System.err.println("MojangAPI: Connection to 'api.mojang.com' timed out");
                     } catch (IOException ex) {
                         ex.printStackTrace();
@@ -178,6 +183,7 @@ public class MojangAPI {
                 try {
                     Response res = Jsoup
                             .connect("https://api.sprax2013.de/mojang/profile/" + URLEncoder.encode(username, "UTF-8"))
+                            .userAgent(USER_AGENT)
                             .ignoreContentType(true).execute();
 
                     if (res.statusCode() == 200) {
@@ -187,7 +193,7 @@ public class MojangAPI {
                         profileCache.put(result.getUUID().toString(), cached);
                         profileCache.put(result.getUsername().toLowerCase(), cached);
                     }
-                } catch (@SuppressWarnings("unused") SocketTimeoutException ignore) {
+                } catch (SocketTimeoutException ignore) {
                     System.err.println("MojangAPI: Connection to 'api.sprax2013.de' timed out");
                     incrementSpraxAPIProblem();
                 } catch (Exception ex) {
@@ -202,7 +208,7 @@ public class MojangAPI {
                     if (username.length() > 16) {
                         try {
                             uuid = UUID.fromString(UUIDUtils.addDashesToUUID(username));
-                        } catch (@SuppressWarnings("unused") Exception ex) {
+                        } catch (Exception ignore) {
                         }
                     } else {
                         MojangUUID uuidObj = getUUID(username);
@@ -216,6 +222,7 @@ public class MojangAPI {
                         try {
                             Response res = Jsoup.connect("https://sessionserver.mojang.com/session/minecraft/profile/"
                                     + URLEncoder.encode(uuid.toString().replace("-", ""), "UTF-8") + "?unsigned=false")
+                                    .userAgent(USER_AGENT)
                                     .ignoreContentType(true).execute();
 
                             if (res.statusCode() == 200) {
@@ -225,7 +232,7 @@ public class MojangAPI {
                                 profileCache.put(result.getUUID().toString(), cached);
                                 profileCache.put(result.getUsername().toLowerCase(), cached);
                             }
-                        } catch (@SuppressWarnings("unused") SocketTimeoutException ignore) {
+                        } catch (SocketTimeoutException ignore) {
                             System.err.println("MojangAPI: Connection to 'sessionserver.mojang.com' timed out");
                         } catch (IOException ex) {
                             ex.printStackTrace();
@@ -258,12 +265,13 @@ public class MojangAPI {
                 try {
                     Response res = Jsoup
                             .connect("https://api.sprax2013.de/mojang/uuid/" + URLEncoder.encode(username, "UTF-8"))
+                            .userAgent(USER_AGENT)
                             .timeout(5_000).ignoreContentType(true).execute();
 
                     if (res.statusCode() == 200) {
                         result = gson.fromJson(res.body(), MojangUUID.class);
                     }
-                } catch (@SuppressWarnings("unused") SocketTimeoutException ignore) {
+                } catch (SocketTimeoutException ignore) {
                     System.err.println("MojangAPI: Connection to 'api.sprax2013.de' timed out");
                     incrementSpraxAPIProblem();
                 } catch (Exception ex) {
@@ -278,6 +286,7 @@ public class MojangAPI {
                     Response res = Jsoup
                             .connect("https://api.mojang.com/users/profiles/minecraft/"
                                     + URLEncoder.encode(username, "UTF-8"))
+                            .userAgent(USER_AGENT)
                             .ignoreContentType(true).timeout(15_000).execute();
 
                     if (res.statusCode() == 200) {
@@ -313,7 +322,7 @@ class CachedObject {
     private final long millis;
     private final int ttl = 62 * 1_000;
 
-    public CachedObject(Object obj) {
+    CachedObject(Object obj) {
         this.obj = obj;
         this.millis = System.currentTimeMillis();
     }
@@ -322,11 +331,11 @@ class CachedObject {
         return this.obj;
     }
 
-    public boolean isValid() {
+    boolean isValid() {
         return (System.currentTimeMillis() - this.millis) <= ttl;
     }
 
-    public MojangProfile getAsProfile() {
+    MojangProfile getAsProfile() {
         return this.obj instanceof MojangProfile ? (MojangProfile) this.obj : null;
     }
 }
