@@ -5,6 +5,7 @@ import com.mojang.authlib.properties.Property;
 import de.sprax2013.advanced_dev_utils.math_and_numbers.RandomNumberUtils;
 import de.sprax2013.advanced_dev_utils.spigot.utils.GameProfileUtils;
 import de.sprax2013.advanced_dev_utils.spigot.utils.NMSClassUtils;
+import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -12,7 +13,11 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.*;
+import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -20,7 +25,12 @@ import org.bukkit.potion.PotionType;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * With this class you can create an ItemStack with custom MetaData within one
@@ -32,6 +42,7 @@ import java.util.*;
  * Will create a SKULL_ITEM setting the SkullOwner to <i>Sprax2013</i> resulting
  * in automatically get it's subID set to <i>3</i>.
  */
+@SuppressWarnings({"WeakerAccess", "unused", "UnusedReturnValue"})
 public class ItemBuilder {
     private ItemStack item;
     private ItemMeta meta;
@@ -371,7 +382,6 @@ public class ItemBuilder {
      *
      * @return the instantiated ItemBuilder
      */
-    @SuppressWarnings("deprecation")
     public ItemBuilder setSkullOwner(String owner) {
         if (getItemMeta() instanceof SkullMeta) {
             ((SkullMeta) getItemMeta()).setOwner(owner == null ? "" : owner);
@@ -390,7 +400,6 @@ public class ItemBuilder {
      *
      * @return the instantiated ItemBuilder
      */
-    @SuppressWarnings("deprecation")
     public ItemBuilder setSkullOwner(OfflinePlayer owner) {
         if (getItemMeta() instanceof SkullMeta) {
             try {
@@ -422,7 +431,7 @@ public class ItemBuilder {
                     profile = new GameProfile(UUID.randomUUID(), null);
 
                     profile.getProperties().put("textures", new Property("textures", Base64.getEncoder()
-                            .encodeToString(new String("{textures:{SKIN:{url:\"" + skinURL + "\"}}}").getBytes())));
+                            .encodeToString(("{textures:{SKIN:{url:\"" + skinURL + "\"}}}").getBytes())));
                 }
 
                 profileField.set(meta, profile);
@@ -597,80 +606,67 @@ public class ItemBuilder {
         return this;
     }
 
-//    public ItemBuilder addBookPage(BaseComponent[]... pages) {
-//        if (getItemMeta() instanceof BookMeta) {
+    public ItemBuilder addBookPage(BaseComponent[]... pages) {
+        if (getItemMeta() instanceof BookMeta) {
 //            try {
 //                ((BookMeta) getItemMeta()).spigot().addPage(pages);
 //            } catch (@SuppressWarnings("unused") NoSuchMethodError notSupportedSpigotVersion) {
-//                for (BaseComponent[] bCArray : pages) {
-//                    String page = null;
-//
-//                    for (BaseComponent bC : bCArray) {
-//                        if (page == null) {
-//                            page = bC.toLegacyText();
-//                        } else {
-//                            page += bC.toLegacyText();
-//                        }
-//                    }
-//
-//                    ((BookMeta) getItemMeta()).addPage(page == null ? page : page.replace("§f", "§0"));
-//                }
-//            }
-//        }
-//
-//        return this;
-//    }
+            for (BaseComponent[] bCArray : pages) {
+                StringBuilder page = new StringBuilder();
 
-//    public ItemBuilder setBookPage(int page, BaseComponent[] text) {
-//        if (getItemMeta() instanceof BookMeta) {
+                for (BaseComponent bC : bCArray) {
+                    page.append(bC.toLegacyText());
+                }
+
+                ((BookMeta) getItemMeta()).addPage(page.toString().replace("§f", "§0"));
+            }
+//            }
+        }
+
+        return this;
+    }
+
+    public ItemBuilder setBookPage(int page, BaseComponent[] text) {
+        if (getItemMeta() instanceof BookMeta) {
 //            try {
 //                ((BookMeta) getItemMeta()).spigot().setPage(page, text);
 //            } catch (@SuppressWarnings("unused") NoSuchMethodError notSupportedSpigotVersion) {
-//                String pageContent = null;
-//
-//                for (BaseComponent bC : text) {
-//                    if (pageContent == null) {
-//                        pageContent = bC.toLegacyText();
-//                    } else {
-//                        pageContent += bC.toLegacyText();
-//                    }
-//                }
-//
-//                ((BookMeta) getItemMeta()).setPage(page,
-//                        pageContent == null ? pageContent : pageContent.replace("§f", "§0"));
-//            }
-//        }
-//
-//        return this;
-//    }
+            StringBuilder pageContent = new StringBuilder();
 
-//    public ItemBuilder setBookPages(List<BaseComponent[]> pages) {
-//        if (getItemMeta() instanceof BookMeta) {
+            for (BaseComponent bC : text) {
+                pageContent.append(bC.toLegacyText());
+            }
+
+            ((BookMeta) getItemMeta()).setPage(page, pageContent.toString().replace("§f", "§0"));
+//            }
+        }
+
+        return this;
+    }
+
+    public ItemBuilder setBookPages(List<BaseComponent[]> pages) {
+        if (getItemMeta() instanceof BookMeta) {
 //            try {
 //                ((BookMeta) getItemMeta()).spigot().setPages(pages);
 //            } catch (@SuppressWarnings("unused") NoSuchMethodError notSupportedSpigotVersion) {
-//                List<String> pagesLegacy = new ArrayList<>();
-//
-//                for (BaseComponent[] bCArray : pages) {
-//                    String page = null;
-//
-//                    for (BaseComponent bC : bCArray) {
-//                        if (page == null) {
-//                            page = bC.toLegacyText();
-//                        } else {
-//                            page += bC.toLegacyText();
-//                        }
-//                    }
-//
-//                    pagesLegacy.add(page == null ? page : page.replace("§f", "§0"));
-//                }
-//
-//                ((BookMeta) getItemMeta()).setPages(pagesLegacy);
+            List<String> pagesLegacy = new ArrayList<>();
+
+            for (BaseComponent[] bCArray : pages) {
+                StringBuilder page = new StringBuilder();
+
+                for (BaseComponent bC : bCArray) {
+                    page.append(bC.toLegacyText());
+                }
+
+                pagesLegacy.add(page.toString().replace("§f", "§0"));
+            }
+
+            ((BookMeta) getItemMeta()).setPages(pagesLegacy);
 //            }
-//        }
-//
-//        return this;
-//    }
+        }
+
+        return this;
+    }
 
     /**
      * Builds and returns a copy of the ItemStack.<br>
