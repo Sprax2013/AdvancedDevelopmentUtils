@@ -38,7 +38,6 @@ public class MineSkinClient {
     private final ExecutorService pool;
     private final String userAgent;
 
-    private final JsonParser jsonParser = new JsonParser();
     private final Gson gson = new Gson();
 
     private long nextRequest = 0;
@@ -247,7 +246,7 @@ public class MineSkinClient {
     }
 
     Skin handleResponse(String body) throws Exception {
-        JsonObject jsonObject = jsonParser.parse(body).getAsJsonObject();
+        JsonObject jsonObject = JsonParser.parseString(body).getAsJsonObject();
         if (jsonObject.has("error")) {
             throw new Exception(jsonObject.get("error").getAsString());
         }
@@ -260,7 +259,7 @@ public class MineSkinClient {
 
     void handleResponse(String body, SkinCallback callback) {
         try {
-            JsonObject jsonObject = jsonParser.parse(body).getAsJsonObject();
+            JsonObject jsonObject = JsonParser.parseString(body).getAsJsonObject();
             if (jsonObject.has("error")) {
                 callback.error(jsonObject.get("error").getAsString());
                 return;
