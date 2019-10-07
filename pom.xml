@@ -11,7 +11,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>Base</module>
+        <module>base</module>
         <!--        <module>API</module>-->
         <module>Spigot-Plugin</module>
         <!--        <module>v1_9_R1</module>-->
