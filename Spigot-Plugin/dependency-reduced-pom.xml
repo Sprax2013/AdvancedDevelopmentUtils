@@ -3,7 +3,7 @@
   <parent>
     <artifactId>parent</artifactId>
     <groupId>de.sprax2013.adu</groupId>
-    <version>0.0.1-DEV</version>
+    <version>0.0.1.2-DEV</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>spigot</artifactId>
@@ -72,6 +72,12 @@
     </repository>
   </repositories>
   <dependencies>
+    <dependency>
+      <groupId>de.sprax2013.adu</groupId>
+      <artifactId>v1_12_R1</artifactId>
+      <version>0.0.1.2-DEV</version>
+      <scope>compile</scope>
+    </dependency>
     <dependency>
       <groupId>com.comphenix.protocol</groupId>
       <artifactId>ProtocolLib</artifactId>
