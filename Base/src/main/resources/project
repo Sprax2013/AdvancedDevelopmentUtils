@@ -1,0 +1,3 @@
+name=AdvancedDevelopmentUtils
+version=${project.version}
+versionCode=0
