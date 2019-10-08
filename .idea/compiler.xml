@@ -11,8 +11,8 @@
         <module name="v1_11_R1" />
         <module name="v1_9_R2" />
         <module name="v1_9_R1" />
+        <module name="base" />
         <module name="spigot" />
-        <module name="Base" />
         <module name="v1_12_R1" />
         <module name="Spigot-Plugin" />
         <module name="v1_13_R2" />
@@ -21,7 +21,7 @@
     <bytecodeTargetLevel>
       <module name="AdvancedDevelopmentUtils" target="1.8" />
       <module name="api" target="1.8" />
-      <module name="Base" target="1.8" />
+      <module name="base" target="1.8" />
       <module name="parent" target="1.8" />
       <module name="plugin" target="1.8" />
       <module name="spigot" target="1.8" />
