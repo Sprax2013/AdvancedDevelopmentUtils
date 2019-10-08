@@ -73,8 +73,8 @@ public class ZipUtils {
                 }
 
                 if (validWorldArchive) {
-                    File destDir = new File(Bukkit.getWorldContainer().getAbsolutePath() + "/"
-                            + FilenameUtils.getBaseName(zipArchive.getName()));
+                    File destDir = new File(Bukkit.getWorldContainer().getAbsolutePath(),
+                            FilenameUtils.getBaseName(zipArchive.getName()));
 
                     return extractZipArchive(zipArchive, destDir, zipPassword);
                 }

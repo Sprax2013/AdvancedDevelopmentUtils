@@ -96,6 +96,13 @@
         <!-- Modules -->
         <dependency>
             <groupId>de.sprax2013.adu</groupId>
+            <artifactId>base</artifactId>
+            <version>0.0.1.2-DEV</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>de.sprax2013.adu</groupId>
             <artifactId>v1_12_R1</artifactId>
             <version>0.0.1.2-DEV</version>
             <scope>compile</scope>
@@ -143,12 +150,6 @@
             <version>1.8.8-R0.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.sprax2013.adu</groupId>
-            <artifactId>base</artifactId>
-            <version>0.0.1.2-DEV</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>
