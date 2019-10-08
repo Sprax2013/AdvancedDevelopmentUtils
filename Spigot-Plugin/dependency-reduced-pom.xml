@@ -114,6 +114,10 @@
           <groupId>com.googlecode.json-simple</groupId>
         </exclusion>
         <exclusion>
+          <artifactId>guava</artifactId>
+          <groupId>com.google.guava</groupId>
+        </exclusion>
+        <exclusion>
           <artifactId>ebean</artifactId>
           <groupId>org.avaje</groupId>
         </exclusion>

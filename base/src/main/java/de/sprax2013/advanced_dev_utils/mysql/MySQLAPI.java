@@ -29,8 +29,9 @@ public class MySQLAPI {
     public static Connection getConnection(String host, int port, String username, String password, String database) {
         Connection con;
 
+        String conKey = host.toLowerCase() + port + username.toLowerCase() + database;
         synchronized (connections) {
-            con = connections.get(host.toLowerCase() + port + username.toLowerCase() + database);
+            con = connections.get(conKey);
         }
 
         try {
@@ -47,7 +48,7 @@ public class MySQLAPI {
                         "jdbc:mysql://" + host + ":" + port + "/" + database + "?useSSL=false", username, password);
 
                 synchronized (connections) {
-                    connections.put(host.toLowerCase() + port + username.toLowerCase() + database, con);
+                    connections.put(conKey, con);
                 }
             }
         } catch (Exception ex) {
