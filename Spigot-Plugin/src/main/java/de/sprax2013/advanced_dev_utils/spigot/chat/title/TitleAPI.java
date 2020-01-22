@@ -1,6 +1,8 @@
 package de.sprax2013.advanced_dev_utils.spigot.chat.title;
 
+import de.sprax2013.advanced_dev_utils.spigot.nms.chat.title.v1_14_R1;
 import de.sprax2013.advanced_dev_utils.spigot.utils.BukkitServerUtils;
+import de.sprax2013.advanced_dev_utils.spigot.utils.MCPacketUtils;
 import org.bukkit.entity.Player;
 
 public class TitleAPI {
@@ -20,10 +22,10 @@ public class TitleAPI {
                 v1_8_R3.sendTitle(p, title);
                 v1_8_R3.sendSubTitle(p, subTitle);
                 break;
-//		case "v1_12_R1":
-//			v1_12_R1.sendTitle(p, title);
-//			v1_12_R1.sendTitle(p, subTitle);
-//			break;
+            case "v1_14_R1":
+                MCPacketUtils.sendPacket(p, v1_14_R1.getTitlePacket(title));
+                MCPacketUtils.sendPacket(p, v1_14_R1.getSubTitlePacket(subTitle));
+                break;
             default:
                 try {
                     p.sendTitle(title, subTitle);
@@ -57,12 +59,13 @@ public class TitleAPI {
                 v1_8_R3.sendTitle(p, title);
                 v1_8_R3.sendSubTitle(p, subTitle);
                 break;
-//            case "v1_12_R1":
-//                v1_12_R1.setTimes(p, fadeIn, stay, fadeOut);
-//
-//                v1_12_R1.sendTitle(p, title);
-//                v1_12_R1.sendSubTitle(p, subTitle);
-//                break;
+            case "v1_14_R1":
+                MCPacketUtils.sendPacket(p, v1_14_R1.getResetPacket());
+                MCPacketUtils.sendPacket(p, v1_14_R1.getTimesPacket(fadeIn, stay, fadeOut));
+
+                MCPacketUtils.sendPacket(p, v1_14_R1.getTitlePacket(title));
+                MCPacketUtils.sendPacket(p, v1_14_R1.getSubTitlePacket(subTitle));
+                break;
             default:
                 try {
                     p.sendTitle(title, subTitle/*, fadeIn, stay, fadeOut*/);
@@ -89,9 +92,9 @@ public class TitleAPI {
             case "v1_8_R3":
                 v1_8_R3.sendTitle(p, title);
                 break;
-//            case "v1_12_R1":
-//                v1_12_R1.sendTitle(p, title);
-//                break;
+            case "v1_14_R1":
+                MCPacketUtils.sendPacket(p, v1_14_R1.getTitlePacket(title));
+                break;
             default:
                 return false;
         }
@@ -116,10 +119,12 @@ public class TitleAPI {
                 v1_8_R3.setTimes(p, fadeIn, stay, fadeOut);
                 v1_8_R3.sendTitle(p, title);
                 break;
-//            case "v1_12_R1":
-//                v1_12_R1.setTimes(p, fadeIn, stay, fadeOut);
-//                v1_12_R1.sendTitle(p, title);
-//                break;
+            case "v1_14_R1":
+                MCPacketUtils.sendPacket(p, v1_14_R1.getResetPacket());
+                MCPacketUtils.sendPacket(p, v1_14_R1.getTimesPacket(fadeIn, stay, fadeOut));
+
+                MCPacketUtils.sendPacket(p, v1_14_R1.getTitlePacket(title));
+                break;
             default:
                 return false;
         }
@@ -140,9 +145,9 @@ public class TitleAPI {
             case "v1_8_R3":
                 v1_8_R3.sendSubTitle(p, subTitle);
                 break;
-//            case "v1_12_R1":
-//                v1_12_R1.sendSubTitle(p, subTitle);
-//                break;
+            case "v1_14_R1":
+                MCPacketUtils.sendPacket(p, v1_14_R1.getSubTitlePacket(subTitle));
+                break;
             default:
                 return false;
         }
@@ -167,10 +172,12 @@ public class TitleAPI {
                 v1_8_R3.setTimes(p, fadeIn, stay, fadeOut);
                 v1_8_R3.sendSubTitle(p, subTitle);
                 break;
-//            case "v1_12_R1":
-//                v1_12_R1.setTimes(p, fadeIn, stay, fadeOut);
-//                v1_12_R1.sendSubTitle(p, subTitle);
-//                break;
+            case "v1_14_R1":
+                MCPacketUtils.sendPacket(p, v1_14_R1.getResetPacket());
+                MCPacketUtils.sendPacket(p, v1_14_R1.getTimesPacket(fadeIn, stay, fadeOut));
+
+                MCPacketUtils.sendPacket(p, v1_14_R1.getSubTitlePacket(subTitle));
+                break;
             default:
                 return false;
         }
@@ -193,9 +200,10 @@ public class TitleAPI {
             case "v1_8_R3":
                 v1_8_R3.setTimes(p, fadeIn, stay, fadeOut);
                 break;
-//            case "v1_12_R1":
-//                v1_12_R1.setTimes(p, fadeIn, stay, fadeOut);
-//                break;
+            case "v1_14_R1":
+                MCPacketUtils.sendPacket(p, v1_14_R1.getResetPacket());
+                MCPacketUtils.sendPacket(p, v1_14_R1.getTimesPacket(fadeIn, stay, fadeOut));
+                break;
             default:
                 return false;
         }
@@ -215,9 +223,9 @@ public class TitleAPI {
             case "v1_8_R3":
                 v1_8_R3.reset(p);
                 break;
-//            case "v1_12_R1":
-//                v1_12_R1.reset(p);
-//                break;
+            case "v1_14_R1":
+                MCPacketUtils.sendPacket(p, v1_14_R1.getResetPacket());
+                break;
             default:
                 return false;
         }

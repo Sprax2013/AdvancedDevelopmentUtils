@@ -39,6 +39,8 @@
               <artifactSet>
                 <includes>
                   <include>de.sprax2013.adu:base</include>
+                  <include>de.sprax2013.adu:v1_12_R1</include>
+                  <include>de.sprax2013.adu:v1_14_R1</include>
                   <include>org.jsoup:jsoup</include>
                   <include>net.lingala.zip4j:zip4j</include>
                   <include>dnsjava:dnsjava</include>
@@ -73,12 +75,6 @@
   </repositories>
   <dependencies>
     <dependency>
-      <groupId>de.sprax2013.adu</groupId>
-      <artifactId>v1_12_R1</artifactId>
-      <version>0.0.1.2-DEV</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>com.comphenix.protocol</groupId>
       <artifactId>ProtocolLib</artifactId>
       <version>4.4.0</version>
@@ -97,6 +93,12 @@
           <groupId>com.comphenix.executors</groupId>
         </exclusion>
       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>1.3.2</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.spigotmc</groupId>
