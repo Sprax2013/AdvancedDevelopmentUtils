@@ -11,17 +11,12 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.FileWriter;
-import java.util.Arrays;
-import java.util.List;
+import java.util.ArrayList;
 
 public class Main extends JavaPlugin {
     private static Main plugin;
 
-    private final List<String> optionalDepends = Arrays.asList();
-
     public static final String prefix = "§eAdvancedDevUtils-Spigot §8» §r";
-
-    FileWriter fW;
 
     @Override
     public void onEnable() {
@@ -30,7 +25,7 @@ public class Main extends JavaPlugin {
         Bukkit.getConsoleSender()
                 .sendMessage(Main.prefix + "§2Erkannte Server-Version§7: §e" + BukkitServerUtils.getBukkitVersion());
 
-        if (!JavaPluginUtils.checkDependencies(this, prefix, optionalDepends)) {
+        if (!JavaPluginUtils.checkDependencies(this, prefix, new ArrayList<>())) {
             Bukkit.getPluginManager().disablePlugin(this);
         } else {
             de.sprax2013.advanced_dev_utils.Main.init();
@@ -50,7 +45,7 @@ public class Main extends JavaPlugin {
             FakePlayerManager.debug();
         }
 
-        Metrics bStats = new Metrics(this);
+        /*Metrics bStats =*/ new Metrics(this, 5540);
     }
 
     @Override
