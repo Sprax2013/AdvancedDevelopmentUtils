@@ -20,6 +20,7 @@ import org.bukkit.entity.Villager;
 import java.util.Objects;
 import java.util.UUID;
 
+@SuppressWarnings({"unused", "UnusedReturnValue", "WeakerAccess"})
 public class FakePlayer {
     private GameProfile gp;
     Location loc;
@@ -142,6 +143,7 @@ public class FakePlayer {
         return this;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public boolean isSpawned() {
         return vill != null;
     }
@@ -191,14 +193,11 @@ public class FakePlayer {
         if (eventListener != null) {
             FakePlayer npc = this;
 
-            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        eventListener.onInteract(new FakePlayerInteractEvent(npc, p, action));
-                    } catch (Throwable th) {
-                        th.printStackTrace();
-                    }
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {
+                try {
+                    eventListener.onInteract(new FakePlayerInteractEvent(npc, p, action));
+                } catch (Throwable th) {
+                    th.printStackTrace();
                 }
             });
         }
