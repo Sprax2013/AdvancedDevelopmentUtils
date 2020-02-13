@@ -52,6 +52,7 @@
                                     <include>de.sprax2013.adu:base</include>
                                     <include>de.sprax2013.adu:v1_12_R1</include>
                                     <include>de.sprax2013.adu:v1_14_R1</include>
+                                    <include>de.sprax2013.adu:v1_15_R1</include>
                                     <include>org.jsoup:jsoup</include>
                                     <include>net.lingala.zip4j:zip4j</include>
                                     <include>dnsjava:dnsjava</include>
@@ -113,6 +114,13 @@
         <dependency>
             <groupId>de.sprax2013.adu</groupId>
             <artifactId>v1_14_R1</artifactId>
+            <version>0.0.1.2-DEV</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>de.sprax2013.adu</groupId>
+            <artifactId>v1_15_R1</artifactId>
             <version>0.0.1.2-DEV</version>
             <scope>compile</scope>
         </dependency>
