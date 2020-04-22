@@ -182,7 +182,7 @@ public class MojangAPI {
 
                 try {
                     Response res = Jsoup
-                            .connect("https://api.sprax2013.de/mojang/profile/" + URLEncoder.encode(username, "UTF-8"))
+                            .connect("https://api.sprax2013.de/mc/profile/" + URLEncoder.encode(username, "UTF-8"))
                             .userAgent(USER_AGENT)
                             .ignoreContentType(true).execute();
 
@@ -264,7 +264,7 @@ public class MojangAPI {
             if (!skipSpraxAPI()) {
                 try {
                     Response res = Jsoup
-                            .connect("https://api.sprax2013.de/mojang/uuid/" + URLEncoder.encode(username, "UTF-8"))
+                            .connect("https://api.sprax2013.de/mc/uuid/" + URLEncoder.encode(username, "UTF-8"))
                             .userAgent(USER_AGENT)
                             .timeout(5_000).ignoreContentType(true).execute();
 
