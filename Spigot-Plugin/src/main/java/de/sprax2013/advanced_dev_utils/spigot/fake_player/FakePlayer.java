@@ -31,6 +31,11 @@ public class FakePlayer {
     FakePlayerListener eventListener;
 
     public FakePlayer(Location loc, String displayName) {
+        this(loc, displayName, Bukkit.getOnlineMode() ? UUID.nameUUIDFromBytes(UUID.randomUUID().toString().getBytes())
+                : UUID.randomUUID());
+    }
+
+    public FakePlayer(Location loc, String displayName, UUID uuid) {
         if (!JavaPluginUtils.isPluginEnabled("ProtocolLib")) {
             throw new IllegalStateException("ProtocolLib is required to use the FakePlayer-API");
         }
@@ -38,10 +43,7 @@ public class FakePlayer {
         this.loc = loc;
 
         // TODO Use UUID v2 instead
-        this.gp = new GameProfile(
-                Bukkit.getOnlineMode() ? UUID.nameUUIDFromBytes(UUID.randomUUID().toString().getBytes())
-                        : UUID.randomUUID(),
-                Objects.requireNonNull(displayName));
+        this.gp = new GameProfile(Objects.requireNonNull(uuid), Objects.requireNonNull(displayName));
     }
 
     /**
