@@ -10,7 +10,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.FileWriter;
 import java.util.ArrayList;
 
 public class Main extends JavaPlugin {
@@ -45,7 +44,8 @@ public class Main extends JavaPlugin {
             FakePlayerManager.debug();
         }
 
-        /*Metrics bStats =*/ new Metrics(this, 5540);
+        /*Metrics bStats =*/
+        new Metrics(this, 5540);
     }
 
     @Override
