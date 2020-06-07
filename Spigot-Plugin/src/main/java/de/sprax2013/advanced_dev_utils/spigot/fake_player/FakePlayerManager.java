@@ -11,25 +11,23 @@ import de.sprax2013.advanced_dev_utils.spigot.utils.BukkitServerUtils;
 import de.sprax2013.advanced_dev_utils.spigot.utils.MCPacketUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.UUID;
 
 public class FakePlayerManager {
     private static boolean registered;
 
     static Set<FakePlayer> npcs = new HashSet<>();
     static HashMap<Integer, Long> potentialEntityIDs = new HashMap<>();
-    static HashMap<Player, Long> lastInteraction = new HashMap<>();
+    static Set<UUID> interacting = new HashSet<>();
 
     static void add(FakePlayer npc) {
         registerListener();
@@ -59,11 +57,24 @@ public class FakePlayerManager {
                                         if (npc.isSpawned()
                                                 && e.getPacket().getIntegers().read(0) == npc.getEntityID()) {
                                             e.setCancelled(true);
-                                            lastInteraction.put(e.getPlayer(), System.currentTimeMillis());
 
                                             EntityUseAction action = e.getPacket().getEntityUseActions().read(0);
 
                                             if (action != EntityUseAction.INTERACT) {
+                                                if (!interacting.contains(e.getPlayer().getUniqueId())) {
+                                                    interacting.add(e.getPlayer().getUniqueId());
+
+                                                    int currSlot = e.getPlayer().getInventory().getHeldItemSlot();
+
+                                                    // Switch HeldSlot client-side to prevent using the item anyway
+                                                    e.getPlayer().getInventory().setHeldItemSlot(currSlot == 0 ? 1 : 0);
+                                                    Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(),
+                                                            () -> {
+                                                                e.getPlayer().getInventory().setHeldItemSlot(currSlot);
+                                                                interacting.remove(e.getPlayer().getUniqueId());
+                                                            });
+                                                }
+
                                                 npc.callInteractEvent(e.getPlayer(), action);
                                             }
                                         }
@@ -169,21 +180,6 @@ public class FakePlayerManager {
                     });
 
             Bukkit.getPluginManager().registerEvents(new Listener() {
-                @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-                private void onInteract(PlayerInteractEvent e) {
-                    long last = lastInteraction.getOrDefault(e.getPlayer(), -1L);
-
-                    if (last != -1 && System.currentTimeMillis() - last <= 250) {
-                        e.setUseItemInHand(Event.Result.DENY);
-                        e.setCancelled(true);
-                    }
-                }
-
-                @EventHandler(priority = EventPriority.MONITOR)
-                private void onQuit(PlayerQuitEvent e) {
-                    lastInteraction.remove(e.getPlayer());
-                }
-
                 /* cancel as early as possible */
                 @EventHandler(priority = EventPriority.LOWEST)
                 private void onDamage(EntityDamageEvent e) {
