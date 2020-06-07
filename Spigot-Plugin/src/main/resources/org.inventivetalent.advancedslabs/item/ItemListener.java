@@ -25,7 +25,6 @@
  *  authors and contributors and should not be interpreted as representing official policies,
  *  either expressed or implied, of anybody else.
  */
-
 package org.inventivetalent.advancedslabs.item;
 
 import org.bukkit.event.EventHandler;
@@ -41,53 +40,52 @@ import org.inventivetalent.advancedslabs.AdvancedSlabs;
 
 public class ItemListener implements Listener {
 
-	private AdvancedSlabs plugin;
+    private AdvancedSlabs plugin;
 
-	public ItemListener(AdvancedSlabs plugin) {
-		this.plugin = plugin;
-	}
+    public ItemListener(AdvancedSlabs plugin) {
+        this.plugin = plugin;
+    }
 
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void on(PrepareItemCraftEvent event) {
-		for (AdvancedSlabItem item : ItemManager.ITEMS) {
-			item.tryHandlePrepareCraft(event);
-		}
-	}
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void on(PrepareItemCraftEvent event) {
+        for (AdvancedSlabItem item : ItemManager.ITEMS) {
+            item.tryHandlePrepareCraft(event);
+        }
+    }
 
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void on(CraftItemEvent event) {
-		for (AdvancedSlabItem item : ItemManager.ITEMS) {
-			item.tryHandleCraft(event);
-		}
-	}
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void on(CraftItemEvent event) {
+        for (AdvancedSlabItem item : ItemManager.ITEMS) {
+            item.tryHandleCraft(event);
+        }
+    }
 
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void on(PlayerInteractEvent event) {
-		for (AdvancedSlabItem item : ItemManager.ITEMS) {
-			item.tryHandleInteract(event);
-		}
-	}
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void on(PlayerInteractEvent event) {
+        for (AdvancedSlabItem item : ItemManager.ITEMS) {
+            item.tryHandleInteract(event);
+        }
+    }
 
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void on(PlayerInteractEntityEvent event) {
-		for (AdvancedSlabItem item : ItemManager.ITEMS) {
-			item.tryHandleEntityInteract(event);
-		}
-	}
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void on(PlayerInteractEntityEvent event) {
+        for (AdvancedSlabItem item : ItemManager.ITEMS) {
+            item.tryHandleEntityInteract(event);
+        }
+    }
 
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void on(BlockPlaceEvent event) {
-		for (AdvancedSlabItem item : ItemManager.ITEMS) {
-			item.tryHandleBlockPlace(event);
-		}
-	}
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void on(BlockPlaceEvent event) {
+        for (AdvancedSlabItem item : ItemManager.ITEMS) {
+            item.tryHandleBlockPlace(event);
+        }
+    }
 
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void on(EntityDamageByEntityEvent event) {
-		for (AdvancedSlabItem item : ItemManager.ITEMS) {
-			item.tryHandleEntityDamge(event);
-		}
-	}
-
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void on(EntityDamageByEntityEvent event) {
+        for (AdvancedSlabItem item : ItemManager.ITEMS) {
+            item.tryHandleEntityDamge(event);
+        }
+    }
 }
 

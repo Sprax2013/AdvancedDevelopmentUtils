@@ -25,7 +25,6 @@
  *  authors and contributors and should not be interpreted as representing official policies,
  *  either expressed or implied, of anybody else.
  */
-
 package org.inventivetalent.advancedslabs.slab;
 
 import com.google.gson.JsonArray;
@@ -47,113 +46,112 @@ import java.util.UUID;
 
 public class SlabManager implements ISlabManager {
 
-	private AdvancedSlabs plugin;
-	private final Set<IAdvancedSlab> slabs = new HashSet<>();
+    private AdvancedSlabs plugin;
+    private final Set<IAdvancedSlab> slabs = new HashSet<>();
 
-	public SlabManager(AdvancedSlabs plugin) {
-		this.plugin = plugin;
-	}
+    public SlabManager(AdvancedSlabs plugin) {
+        this.plugin = plugin;
+    }
 
-	@Deprecated
-	@Synchronized
-	@Override
-	public AdvancedSlab createSlab(Location location, Material material, byte data) {
-		AdvancedSlab slab = new AdvancedSlab(location);
-		slab.setMaterial(material, data);
+    @Deprecated
+    @Synchronized
+    @Override
+    public AdvancedSlab createSlab(Location location, Material material, byte data) {
+        AdvancedSlab slab = new AdvancedSlab(location);
+        slab.setMaterial(material, data);
 
-		slabs.add(slab);
-		return slab;
-	}
+        slabs.add(slab);
+        return slab;
+    }
 
-	@Override
-	public AdvancedSlab createSlab(Location location, BlockData blockData) {
-		return createSlab(location, blockData.getAsString());
-	}
+    @Override
+    public AdvancedSlab createSlab(Location location, BlockData blockData) {
+        return createSlab(location, blockData.getAsString());
+    }
 
+    @Synchronized
+    @Override
+    public AdvancedSlab createSlab(Location location, Material material) {
+        AdvancedSlab slab = new AdvancedSlab(location);
+        slab.setMaterial(material);
 
-	@Synchronized
-	@Override
-	public AdvancedSlab createSlab(Location location, Material material) {
-		AdvancedSlab slab = new AdvancedSlab(location);
-		slab.setMaterial(material);
+        slab.getShulker().setCollidable(false);
 
-		slab.getShulker().setCollidable(false);
+        slabs.add(slab);
+        return slab;
+    }
 
-		slabs.add(slab);
-		return slab;
-	}
+    @Synchronized
+    @Override
+    public AdvancedSlab createSlab(Location location, String data) {
+        AdvancedSlab slab = new AdvancedSlab(location);
+        slab.setMaterial(data);
 
-	@Synchronized
-	@Override
-	public AdvancedSlab createSlab(Location location, String data) {
-		AdvancedSlab slab = new AdvancedSlab(location);
-		slab.setMaterial(data);
+        slab.getShulker().setCollidable(false);
 
-		slab.getShulker().setCollidable(false);
+        slabs.add(slab);
+        return slab;
+    }
 
-		slabs.add(slab);
-		return slab;
-	}
+    @Synchronized
+    @Override
+    public void removeSlab(IAdvancedSlab slab) {
+        slabs.remove(slab);
+        ((AdvancedSlab) slab).despawn();
+    }
 
-	@Synchronized
-	@Override
-	public void removeSlab(IAdvancedSlab slab) {
-		slabs.remove(slab);
-		((AdvancedSlab) slab).despawn();
-	}
+    @Override
+    public IAdvancedSlab getSlabForEntity(Entity entity) {
+        return getSlabForUUID(entity.getUniqueId());
+    }
 
-	@Override
-	public IAdvancedSlab getSlabForEntity(Entity entity) {
-		return getSlabForUUID(entity.getUniqueId());
-	}
+    @Synchronized
+    @Override
+    public IAdvancedSlab getSlabForUUID(UUID uuid) {
+        for (IAdvancedSlab slab : slabs) {
+            if (slab.getArmorStandUUID().equals(uuid) || slab.getShulkerUUID().equals(uuid) || slab.getFallingBlockUUID().equals(uuid)) {
+                return slab;
+            }
+        }
+        return null;
+    }
 
-	@Synchronized
-	@Override
-	public IAdvancedSlab getSlabForUUID(UUID uuid) {
-		for (IAdvancedSlab slab : slabs) {
-			if (slab.getArmorStandUUID().equals(uuid) || slab.getShulkerUUID().equals(uuid) || slab.getFallingBlockUUID().equals(uuid)) {
-				return slab;
-			}
-		}
-		return null;
-	}
+    @Synchronized
+    @Override
+    public Set<IAdvancedSlab> getSlabsForPath(ISlabPath path) {
+        Set<IAdvancedSlab> slabs = new HashSet<>();
+        for (IAdvancedSlab slab : this.slabs) {
+            if (slab.getPathId() == path.getId()) {
+                slabs.add(slab);
+            }
+        }
+        return slabs;
+    }
 
-	@Synchronized
-	@Override
-	public Set<IAdvancedSlab> getSlabsForPath(ISlabPath path) {
-		Set<IAdvancedSlab> slabs = new HashSet<>();
-		for (IAdvancedSlab slab : this.slabs) {
-			if (slab.getPathId() == path.getId()) {
-				slabs.add(slab);
-			}
-		}
-		return slabs;
-	}
+    @Synchronized
+    public JsonArray toJson() {
+        JsonArray array = new JsonArray();
+        for (IAdvancedSlab slab : slabs) {
+            array.add(((AdvancedSlab) slab).toJson());
+        }
+        return array;
+    }
 
-	@Synchronized
-	public JsonArray toJson() {
-		JsonArray array = new JsonArray();
-		for (IAdvancedSlab slab : slabs) {
-			array.add(((AdvancedSlab) slab).toJson());
-		}
-		return array;
-	}
+    @Synchronized
+    public void loadJson(JsonArray jsonArray) {
+        for (Iterator<JsonElement> iterator = jsonArray.iterator(); iterator.hasNext(); ) {
+            JsonElement next = iterator.next();
+            slabs.add(new AdvancedSlab(next.getAsJsonObject()));
+        }
+    }
 
-	@Synchronized
-	public void loadJson(JsonArray jsonArray) {
-		for (Iterator<JsonElement> iterator = jsonArray.iterator(); iterator.hasNext(); ) {
-			JsonElement next = iterator.next();
-			slabs.add(new AdvancedSlab(next.getAsJsonObject()));
-		}
-	}
+    @Synchronized
+    public Set<IAdvancedSlab> getSlabs() {
+        return new HashSet<>(slabs);
+    }
 
-	@Synchronized
-	public Set<IAdvancedSlab> getSlabs() {
-		return new HashSet<>(slabs);
-	}
-
-	@Synchronized
-	public int size() {
-		return slabs.size();
-	}
+    @Synchronized
+    public int size() {
+        return slabs.size();
+    }
 }

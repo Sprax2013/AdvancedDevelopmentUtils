@@ -8,27 +8,27 @@ import org.bukkit.event.HandlerList;
  * This event is called after a player got nicked
  */
 public class PlayerNickEvent extends Event {
-	public static HandlerList handlers = new HandlerList();
+    public static HandlerList handlers = new HandlerList();
 
-	private Player p;
+    private Player p;
 
-	public PlayerNickEvent(Player p) {
-		this.p = p;
-	}
+    public PlayerNickEvent(Player p) {
+        this.p = p;
+    }
 
-	/**
-	 * @return The player who got nicked
-	 */
-	public Player getPlayer() {
-		return p;
-	}
+    /**
+     * @return The player who got nicked
+     */
+    public Player getPlayer() {
+        return p;
+    }
 
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
 
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
 }

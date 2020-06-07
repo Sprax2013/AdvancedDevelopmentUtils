@@ -1,6 +1,10 @@
 package de.sprax2013.advanced_dev_utils.network;
 
-import org.xbill.DNS.*;
+import org.xbill.DNS.Lookup;
+import org.xbill.DNS.Record;
+import org.xbill.DNS.SRVRecord;
+import org.xbill.DNS.TextParseException;
+import org.xbill.DNS.Type;
 
 public class DNSUtils {
     /**

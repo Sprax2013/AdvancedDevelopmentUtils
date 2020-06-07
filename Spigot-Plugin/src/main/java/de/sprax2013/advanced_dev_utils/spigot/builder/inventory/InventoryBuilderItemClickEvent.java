@@ -6,50 +6,50 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class InventoryBuilderItemClickEvent {
-	private HumanEntity entity;
+    private HumanEntity entity;
 
-	private int slot;
-	private ItemStack item;
+    private int slot;
+    private ItemStack item;
 
-	private Inventory inv;
+    private Inventory inv;
 
-	private ClickType clickType;
+    private ClickType clickType;
 
-	private boolean canceled;
+    private boolean canceled;
 
-	public InventoryBuilderItemClickEvent(HumanEntity entity, int slot, ItemStack item, Inventory inv,
-			ClickType clickType) {
-		this.entity = entity;
+    public InventoryBuilderItemClickEvent(HumanEntity entity, int slot, ItemStack item, Inventory inv,
+                                          ClickType clickType) {
+        this.entity = entity;
 
-		this.slot = slot;
-		this.item = item;
+        this.slot = slot;
+        this.item = item;
 
-		this.inv = inv;
+        this.inv = inv;
 
-		this.clickType = clickType;
-	}
+        this.clickType = clickType;
+    }
 
-	public HumanEntity getEntity() {
-		return entity;
-	}
+    public HumanEntity getEntity() {
+        return entity;
+    }
 
-	public int getSlot() {
-		return slot;
-	}
+    public int getSlot() {
+        return slot;
+    }
 
-	public ItemStack getClickedItem() {
-		return item;
-	}
+    public ItemStack getClickedItem() {
+        return item;
+    }
 
-	public Inventory getInventory() {
-		return inv;
-	}
+    public Inventory getInventory() {
+        return inv;
+    }
 
-	public ClickType getClickType() {
-		return clickType;
-	}
+    public ClickType getClickType() {
+        return clickType;
+    }
 
-	public boolean isCanceled() {
-		return canceled;
-	}
+    public boolean isCanceled() {
+        return canceled;
+    }
 }

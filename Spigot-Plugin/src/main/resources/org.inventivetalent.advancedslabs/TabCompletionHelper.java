@@ -25,7 +25,6 @@
  *  authors and contributors and should not be interpreted as representing official policies,
  *  either expressed or implied, of anybody else.
  */
-
 package org.inventivetalent.advancedslabs;
 
 import java.util.ArrayList;
@@ -40,23 +39,22 @@ import java.util.List;
 
 class TabCompletionHelper {
 
-	public static List<String> getPossibleCompletionsForGivenArgs(String[] args, String[] possibilitiesOfCompletion) {
-		final String argumentToFindCompletionFor = args[args.length - 1];
+    public static List<String> getPossibleCompletionsForGivenArgs(String[] args, String[] possibilitiesOfCompletion) {
+        final String argumentToFindCompletionFor = args[args.length - 1];
 
-		final List<String> listOfPossibleCompletions = new ArrayList<String>();
-		for (int i = 0; i < possibilitiesOfCompletion.length; i++) {
-			final String[] foundString = possibilitiesOfCompletion;
-			try {
-				if (foundString[i] != null && foundString[i].regionMatches(true, 0, argumentToFindCompletionFor, 0, argumentToFindCompletionFor.length())) {
-					listOfPossibleCompletions.add(foundString[i]);
-				}
-			} catch (final Exception e) {
-				e.printStackTrace();
-			}
-		}
-		Collections.sort(listOfPossibleCompletions);
+        final List<String> listOfPossibleCompletions = new ArrayList<String>();
+        for (int i = 0; i < possibilitiesOfCompletion.length; i++) {
+            final String[] foundString = possibilitiesOfCompletion;
+            try {
+                if (foundString[i] != null && foundString[i].regionMatches(true, 0, argumentToFindCompletionFor, 0, argumentToFindCompletionFor.length())) {
+                    listOfPossibleCompletions.add(foundString[i]);
+                }
+            } catch (final Exception e) {
+                e.printStackTrace();
+            }
+        }
+        Collections.sort(listOfPossibleCompletions);
 
-		return listOfPossibleCompletions;
-	}
-
+        return listOfPossibleCompletions;
+    }
 }

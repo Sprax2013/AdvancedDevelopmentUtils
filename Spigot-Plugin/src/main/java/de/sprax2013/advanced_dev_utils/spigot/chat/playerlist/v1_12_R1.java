@@ -3,10 +3,10 @@ package de.sprax2013.advanced_dev_utils.spigot.chat.playerlist;
 import org.bukkit.entity.Player;
 
 public class v1_12_R1 {
-	/**
-	 * @see PlayerListAPI#sendHeaderAndFooter(Player, String, String)
-	 */
-	static void sendPlayerListHeaderAndFooter(Player p, String header, String footer) {
+    /**
+     * @see PlayerListAPI#sendHeaderAndFooter(Player, String, String)
+     */
+    static void sendPlayerListHeaderAndFooter(Player p, String header, String footer) {
 //		try {
 //			IChatBaseComponent headerC = ChatSerializer.a("{\"translate\":\"\"}"),
 //					footerC = ChatSerializer.a("{\"translate\":\"\"}");
@@ -33,5 +33,5 @@ public class v1_12_R1 {
 //		} catch (Exception ex) {
 //			ex.printStackTrace();
 //		}
-	}
+    }
 }

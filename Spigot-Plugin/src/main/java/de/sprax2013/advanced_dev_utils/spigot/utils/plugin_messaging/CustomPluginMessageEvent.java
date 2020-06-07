@@ -4,31 +4,31 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class CustomPluginMessageEvent extends Event {
-	// TODO JavaDocs
+    // TODO JavaDocs
 
-	public static HandlerList handlers = new HandlerList();
+    public static HandlerList handlers = new HandlerList();
 
-	private final String subChannel, msg;
+    private final String subChannel, msg;
 
-	public CustomPluginMessageEvent(String subChannel, String msg) {
-		this.subChannel = subChannel;
-		this.msg = msg;
-	}
+    public CustomPluginMessageEvent(String subChannel, String msg) {
+        this.subChannel = subChannel;
+        this.msg = msg;
+    }
 
-	public String getSubChannel() {
-		return subChannel;
-	}
+    public String getSubChannel() {
+        return subChannel;
+    }
 
-	public String getMessage() {
-		return msg;
-	}
+    public String getMessage() {
+        return msg;
+    }
 
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
 
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
 }

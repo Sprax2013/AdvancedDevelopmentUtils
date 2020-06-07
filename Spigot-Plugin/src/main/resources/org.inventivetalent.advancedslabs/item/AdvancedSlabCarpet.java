@@ -25,7 +25,6 @@
  *  authors and contributors and should not be interpreted as representing official policies,
  *  either expressed or implied, of anybody else.
  */
-
 package org.inventivetalent.advancedslabs.item;
 
 import org.bukkit.Material;
@@ -34,14 +33,14 @@ import org.bukkit.inventory.Recipe;
 
 public class AdvancedSlabCarpet extends AdvancedSlabItem {
 
-	@Override
-	public ItemStack getItem() {
-		return new ItemStack(Material.WHITE_CARPET);
-	}
+    @Override
+    public ItemStack getItem() {
+        return new ItemStack(Material.WHITE_CARPET);
+    }
 
-	@Override
-	public Recipe getRecipe() {
+    @Override
+    public Recipe getRecipe() {
 //		ShapedRecipe recipe = new ShapedRecipe(getItem());
-		return null;
-	}
+        return null;
+    }
 }

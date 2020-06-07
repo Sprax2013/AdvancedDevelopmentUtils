@@ -23,8 +23,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.HashMap;
 
@@ -825,7 +823,7 @@ public class InventoryBuilder {
 //                                + Boolean.valueOf(data.isExtended()).toString() + ","
 //                                + Boolean.valueOf(data.isUpgraded()).toString() + "))";
 //                    } else
-                    	if (is.getItemMeta() instanceof LeatherArmorMeta) {
+                    if (is.getItemMeta() instanceof LeatherArmorMeta) {
                         Color color = ((LeatherArmorMeta) is.getItemMeta()).getColor();
 
                         itemB += ".setColor(Color.fromRGB(" + color.getRed() + "," + color.getGreen() + ","

@@ -4,48 +4,48 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
 
 public class InventoryBuilderClickEvent {
-	private final HumanEntity entity;
+    private final HumanEntity entity;
 
-	private final int rawSlot, slot;
+    private final int rawSlot, slot;
 
-	private final ItemStack slotItem, cursorItem;
+    private final ItemStack slotItem, cursorItem;
 
-	private final boolean canceled;
+    private final boolean canceled;
 
-	public InventoryBuilderClickEvent(HumanEntity entity, int rawSlot, int slot, ItemStack slotItem,
-			ItemStack cursorItem, boolean canceled) {
-		this.entity = entity;
+    public InventoryBuilderClickEvent(HumanEntity entity, int rawSlot, int slot, ItemStack slotItem,
+                                      ItemStack cursorItem, boolean canceled) {
+        this.entity = entity;
 
-		this.rawSlot = rawSlot;
-		this.slot = slot;
+        this.rawSlot = rawSlot;
+        this.slot = slot;
 
-		this.slotItem = slotItem;
-		this.cursorItem = cursorItem;
+        this.slotItem = slotItem;
+        this.cursorItem = cursorItem;
 
-		this.canceled = canceled;
-	}
+        this.canceled = canceled;
+    }
 
-	public HumanEntity getEntity() {
-		return entity;
-	}
+    public HumanEntity getEntity() {
+        return entity;
+    }
 
-	public int getRawSlot() {
-		return rawSlot;
-	}
+    public int getRawSlot() {
+        return rawSlot;
+    }
 
-	public int getSlot() {
-		return slot;
-	}
+    public int getSlot() {
+        return slot;
+    }
 
-	public ItemStack getSlotItem() {
-		return slotItem;
-	}
+    public ItemStack getSlotItem() {
+        return slotItem;
+    }
 
-	public ItemStack getCursorItem() {
-		return cursorItem;
-	}
+    public ItemStack getCursorItem() {
+        return cursorItem;
+    }
 
-	public boolean isCanceled() {
-		return canceled;
-	}
+    public boolean isCanceled() {
+        return canceled;
+    }
 }

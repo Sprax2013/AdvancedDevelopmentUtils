@@ -25,7 +25,6 @@
  *  authors and contributors and should not be interpreted as representing official policies,
  *  either expressed or implied, of anybody else.
  */
-
 package org.inventivetalent.advancedslabs.slab;
 
 import org.bukkit.scheduler.BukkitRunnable;
@@ -34,21 +33,21 @@ import org.inventivetalent.advancedslabs.api.IAdvancedSlab;
 
 public class FallingBlockResetTask extends BukkitRunnable {
 
-	private AdvancedSlabs plugin;
+    private AdvancedSlabs plugin;
 
-	public FallingBlockResetTask(AdvancedSlabs plugin) {
-		this.plugin = plugin;
-	}
+    public FallingBlockResetTask(AdvancedSlabs plugin) {
+        this.plugin = plugin;
+    }
 
-	@Override
-	public void run() {
-		for (IAdvancedSlab slab : plugin.slabManager.getSlabs()) {
-			if (slab == null) {
-				continue;
-			}
-			if (slab.getFallingBlock() == null || slab.getFallingBlock().isDead()) {
-				slab.respawnFallingBlock();
-			}
-		}
-	}
+    @Override
+    public void run() {
+        for (IAdvancedSlab slab : plugin.slabManager.getSlabs()) {
+            if (slab == null) {
+                continue;
+            }
+            if (slab.getFallingBlock() == null || slab.getFallingBlock().isDead()) {
+                slab.respawnFallingBlock();
+            }
+        }
+    }
 }

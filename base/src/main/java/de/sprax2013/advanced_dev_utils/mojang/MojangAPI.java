@@ -3,7 +3,6 @@ package de.sprax2013.advanced_dev_utils.mojang;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import de.sprax2013.advanced_dev_utils.misc.UUIDUtils;
-import org.jsoup.Connection;
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 

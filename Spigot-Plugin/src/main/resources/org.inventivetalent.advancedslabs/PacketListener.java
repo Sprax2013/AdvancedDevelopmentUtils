@@ -25,7 +25,6 @@
  *  authors and contributors and should not be interpreted as representing official policies,
  *  either expressed or implied, of anybody else.
  */
-
 package org.inventivetalent.advancedslabs;
 
 import org.bukkit.Bukkit;
@@ -40,45 +39,44 @@ import java.util.UUID;
 
 public class PacketListener {
 
-	private PacketHandler packetHandler;
+    private PacketHandler packetHandler;
 
-	boolean use13 = Minecraft.VERSION.newerThan(Minecraft.Version.v1_13_R1);
+    boolean use13 = Minecraft.VERSION.newerThan(Minecraft.Version.v1_13_R1);
 
-	public PacketListener(AdvancedSlabs plugin) {
-		this.packetHandler = new PacketHandler(plugin) {
+    public PacketListener(AdvancedSlabs plugin) {
+        this.packetHandler = new PacketHandler(plugin) {
 
-			@Override
-			@PacketOptions(forcePlayer = true)
-			public void onSend(SentPacket sentPacket) {
-				if ("PacketPlayOutSpawnEntityLiving".equals(sentPacket.getPacketName())) {
-					int c = (int) sentPacket.getPacketValue("c");
-					if ((use13 && c == 59) || c == 69) {//Shulker
-						UUID b = (UUID) sentPacket.getPacketValue("b");
-						final IAdvancedSlab slab = AdvancedSlabs.instance.slabManager.getSlabForUUID(b);
-						if (slab != null) {
-							Bukkit.getScheduler().runTaskLater(getPlugin(), new Runnable() {
-								@Override
-								public void run() {
-									slab.refreshEntities();
-									slab.respawnFallingBlock();
-								}
-							}, 10);
-						}
-					}
-				}
-			}
+            @Override
+            @PacketOptions(forcePlayer = true)
+            public void onSend(SentPacket sentPacket) {
+                if ("PacketPlayOutSpawnEntityLiving".equals(sentPacket.getPacketName())) {
+                    int c = (int) sentPacket.getPacketValue("c");
+                    if ((use13 && c == 59) || c == 69) {//Shulker
+                        UUID b = (UUID) sentPacket.getPacketValue("b");
+                        final IAdvancedSlab slab = AdvancedSlabs.instance.slabManager.getSlabForUUID(b);
+                        if (slab != null) {
+                            Bukkit.getScheduler().runTaskLater(getPlugin(), new Runnable() {
+                                @Override
+                                public void run() {
+                                    slab.refreshEntities();
+                                    slab.respawnFallingBlock();
+                                }
+                            }, 10);
+                        }
+                    }
+                }
+            }
 
-			@Override
-			public void onReceive(ReceivedPacket receivedPacket) {
-			}
-		};
-		PacketHandler.addHandler(this.packetHandler);
-	}
+            @Override
+            public void onReceive(ReceivedPacket receivedPacket) {
+            }
+        };
+        PacketHandler.addHandler(this.packetHandler);
+    }
 
-	public void disable() {
-		if (this.packetHandler != null) {
-			PacketHandler.removeHandler(this.packetHandler);
-		}
-	}
-
+    public void disable() {
+        if (this.packetHandler != null) {
+            PacketHandler.removeHandler(this.packetHandler);
+        }
+    }
 }

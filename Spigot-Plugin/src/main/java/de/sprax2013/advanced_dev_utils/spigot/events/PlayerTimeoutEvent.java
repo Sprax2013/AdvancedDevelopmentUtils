@@ -5,38 +5,38 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class PlayerTimeoutEvent extends Event {
-	public static HandlerList handlers = new HandlerList();
+    public static HandlerList handlers = new HandlerList();
 
-	private Player p;
+    private Player p;
 
-	private int lastPing;
-	private String quitMsg;
+    private int lastPing;
+    private String quitMsg;
 
-	public PlayerTimeoutEvent(Player p, int lastPing, String quitMsg) {
-		this.p = p;
+    public PlayerTimeoutEvent(Player p, int lastPing, String quitMsg) {
+        this.p = p;
 
-		this.lastPing = lastPing;
-		this.quitMsg = quitMsg;
-	}
+        this.lastPing = lastPing;
+        this.quitMsg = quitMsg;
+    }
 
-	public Player getPlayer() {
-		return this.p;
-	}
+    public Player getPlayer() {
+        return this.p;
+    }
 
-	public int getLastPing() {
-		return this.lastPing;
-	}
+    public int getLastPing() {
+        return this.lastPing;
+    }
 
-	public String getQuitMessage() {
-		return this.quitMsg;
-	}
+    public String getQuitMessage() {
+        return this.quitMsg;
+    }
 
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
 
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
 }

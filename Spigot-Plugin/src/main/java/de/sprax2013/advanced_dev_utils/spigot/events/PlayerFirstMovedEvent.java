@@ -9,27 +9,27 @@ import org.bukkit.event.HandlerList;
  * the server
  */
 public class PlayerFirstMovedEvent extends Event {
-	public static HandlerList handlers = new HandlerList();
+    public static HandlerList handlers = new HandlerList();
 
-	private Player p;
+    private Player p;
 
-	public PlayerFirstMovedEvent(Player p) {
-		this.p = p;
-	}
+    public PlayerFirstMovedEvent(Player p) {
+        this.p = p;
+    }
 
-	/**
-	 * @return The player who moved
-	 */
-	public Player getPlayer() {
-		return p;
-	}
+    /**
+     * @return The player who moved
+     */
+    public Player getPlayer() {
+        return p;
+    }
 
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
 
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
 }

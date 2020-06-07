@@ -25,7 +25,6 @@
  *  authors and contributors and should not be interpreted as representing official policies,
  *  either expressed or implied, of anybody else.
  */
-
 package org.inventivetalent.advancedslabs.movement;
 
 import org.bukkit.Bukkit;
@@ -37,21 +36,25 @@ import org.inventivetalent.advancedslabs.movement.path.SlabPath;
 
 public class PathMovementTask extends BukkitRunnable {
 
-	private AdvancedSlabs plugin;
+    private AdvancedSlabs plugin;
 
-	public PathMovementTask(AdvancedSlabs plugin) {
-		this.plugin = plugin;
-	}
+    public PathMovementTask(AdvancedSlabs plugin) {
+        this.plugin = plugin;
+    }
 
-	@Override
-	public void run() {
-		if (Bukkit.getOnlinePlayers().isEmpty()) { return; }
-		for (IAdvancedSlab slab : plugin.slabManager.getSlabs()) {
-			if (slab.getPathId() == -1) { continue; }
-			ISlabPath path = plugin.pathManager.getPathById(slab.getPathId());
-			if (path != null) {
-				((SlabPath) path).tick();
-			}
-		}
-	}
+    @Override
+    public void run() {
+        if (Bukkit.getOnlinePlayers().isEmpty()) {
+            return;
+        }
+        for (IAdvancedSlab slab : plugin.slabManager.getSlabs()) {
+            if (slab.getPathId() == -1) {
+                continue;
+            }
+            ISlabPath path = plugin.pathManager.getPathById(slab.getPathId());
+            if (path != null) {
+                ((SlabPath) path).tick();
+            }
+        }
+    }
 }

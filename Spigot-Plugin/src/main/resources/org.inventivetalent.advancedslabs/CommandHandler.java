@@ -25,7 +25,6 @@
  *  authors and contributors and should not be interpreted as representing official policies,
  *  either expressed or implied, of anybody else.
  */
-
 package org.inventivetalent.advancedslabs;
 
 import org.bukkit.Bukkit;
@@ -45,226 +44,229 @@ import org.inventivetalent.advancedslabs.item.ItemManager;
 import org.inventivetalent.advancedslabs.movement.path.editor.PathEditor;
 import org.inventivetalent.glow.GlowAPI;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 public class CommandHandler implements CommandExecutor, TabCompleter {
 
-	private AdvancedSlabs plugin;
+    private AdvancedSlabs plugin;
 
-	public Set<UUID> highlightedPlayers = new HashSet<>();
+    public Set<UUID> highlightedPlayers = new HashSet<>();
 
-	public CommandHandler(AdvancedSlabs plugin) {
-		this.plugin = plugin;
-	}
+    public CommandHandler(AdvancedSlabs plugin) {
+        this.plugin = plugin;
+    }
 
-	@Override
-	public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-		if (args.length == 0) {
-			if (sender.hasPermission("advancedslabs.wand")) {
-				sender.sendMessage("§a/aslab wand");
-			}
-			if (sender.hasPermission("advancedslabs.pathwand")) {
-				sender.sendMessage("§a/aslab pathwand");
-			}
-			if (sender.hasPermission("advancedslabs.highlight")) {
-				sender.sendMessage("§a/aslab highlight");
-			}
-			if (sender.hasPermission("advancedslabs.reload")) {
-				sender.sendMessage("§a/aslab reload");
-			}
-			if (sender.hasPermission("advancedslabs.give")) {
-				sender.sendMessage("§a/aslab give <Material>[:Data] [Player]");
-			}
-			if (sender.hasPermission("advancedslabs.save")) {
-				sender.sendMessage("§a/aslab save");
-			}
-			return true;
-		}
-		if ("wand".equalsIgnoreCase(args[0])) {
-			if (sender.hasPermission("advancedslabs.wand")) {
-				if (sender instanceof Player) {
-					((Player) sender).getInventory().addItem(ItemManager.editorWand.getItem());
-				}
-				return true;
-			}
-		}
-		if ("pathwand".equalsIgnoreCase(args[0])) {
-			if (sender.hasPermission("advancedslabs.pathwand")) {
-				if (sender instanceof Player) {
-					((Player) sender).getInventory().addItem(ItemManager.pathWand.getItem());
-				}
-				return true;
-			}
-		}
-		if ("highlight".equalsIgnoreCase(args[0])) {
-			if (sender.hasPermission("advancedslabs.highlight")) {
-				if (sender instanceof Player) {
-					for (Entity entity : ((Player) sender).getNearbyEntities(16, 16, 16)) {
-						IAdvancedSlab slab = plugin.slabManager.getSlabForEntity(entity);
-						if (slab != null) {
-							if (highlightedPlayers.contains(((Player) sender).getUniqueId())) {
-								GlowAPI.setGlowing(slab.getShulker(), false, (Player) sender);
-							} else {
-								EditorManager.setGlowing(slab, ((Player) sender));
-							}
-						}
-					}
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
+        if (args.length == 0) {
+            if (sender.hasPermission("advancedslabs.wand")) {
+                sender.sendMessage("§a/aslab wand");
+            }
+            if (sender.hasPermission("advancedslabs.pathwand")) {
+                sender.sendMessage("§a/aslab pathwand");
+            }
+            if (sender.hasPermission("advancedslabs.highlight")) {
+                sender.sendMessage("§a/aslab highlight");
+            }
+            if (sender.hasPermission("advancedslabs.reload")) {
+                sender.sendMessage("§a/aslab reload");
+            }
+            if (sender.hasPermission("advancedslabs.give")) {
+                sender.sendMessage("§a/aslab give <Material>[:Data] [Player]");
+            }
+            if (sender.hasPermission("advancedslabs.save")) {
+                sender.sendMessage("§a/aslab save");
+            }
+            return true;
+        }
+        if ("wand".equalsIgnoreCase(args[0])) {
+            if (sender.hasPermission("advancedslabs.wand")) {
+                if (sender instanceof Player) {
+                    ((Player) sender).getInventory().addItem(ItemManager.editorWand.getItem());
+                }
+                return true;
+            }
+        }
+        if ("pathwand".equalsIgnoreCase(args[0])) {
+            if (sender.hasPermission("advancedslabs.pathwand")) {
+                if (sender instanceof Player) {
+                    ((Player) sender).getInventory().addItem(ItemManager.pathWand.getItem());
+                }
+                return true;
+            }
+        }
+        if ("highlight".equalsIgnoreCase(args[0])) {
+            if (sender.hasPermission("advancedslabs.highlight")) {
+                if (sender instanceof Player) {
+                    for (Entity entity : ((Player) sender).getNearbyEntities(16, 16, 16)) {
+                        IAdvancedSlab slab = plugin.slabManager.getSlabForEntity(entity);
+                        if (slab != null) {
+                            if (highlightedPlayers.contains(((Player) sender).getUniqueId())) {
+                                GlowAPI.setGlowing(slab.getShulker(), false, (Player) sender);
+                            } else {
+                                EditorManager.setGlowing(slab, ((Player) sender));
+                            }
+                        }
+                    }
 
-					if (highlightedPlayers.contains(((Player) sender).getUniqueId())) {
-						highlightedPlayers.remove(((Player) sender).getUniqueId());
-					} else {
-						highlightedPlayers.add(((Player) sender).getUniqueId());
-						sender.sendMessage(plugin.messages.getMessage("highlight"));
-					}
-					return true;
-				}
-			}
-		}
-		if ("respawn".equalsIgnoreCase(args[0])) {
-			if (sender.hasPermission("advancedslabs.respawn")) {
-				if (sender instanceof Player) {
-					for (Entity entity : ((Player) sender).getNearbyEntities(16, 16, 16)) {
-						IAdvancedSlab slab = plugin.slabManager.getSlabForEntity(entity);
-						if (slab != null) {
-							slab.refreshEntities();
-							slab.respawnFallingBlock();
-						}
-					}
-					sender.sendMessage(plugin.messages.getMessage("respawn"));
-				}
-			}
-		}
-		if ("reload".equalsIgnoreCase(args[0])) {
-			if (sender.hasPermission("advancedslabs.reload")) {
-				AdvancedSlabs.instance.reload();
-				sender.sendMessage("§aReloaded.");
-				return true;
-			}
-		}
-		if ("give".equalsIgnoreCase(args[0])) {
-			if (sender.hasPermission("advancedslabs.give")) {
-				if (args.length == 1) {
-					sender.sendMessage("§a/aslab give <Material>[Data] [Player]");
-					return false;
-				}
-				String materialString = args[1];
-				String dataString = "";
-				if (materialString.contains("[")) {
-					String[] split = materialString.split("\\[");
-					materialString = split[0];
-					dataString = "["+split[1];
-				}
-				Material material = null;
-				try {
-						material = Material.matchMaterial(materialString);
-				} catch (Exception e) {
-				}
-				if (material == null) {
-					sender.sendMessage(plugin.messages.getMessage("invalidMaterial", materialString));
-					return false;
-				}
+                    if (highlightedPlayers.contains(((Player) sender).getUniqueId())) {
+                        highlightedPlayers.remove(((Player) sender).getUniqueId());
+                    } else {
+                        highlightedPlayers.add(((Player) sender).getUniqueId());
+                        sender.sendMessage(plugin.messages.getMessage("highlight"));
+                    }
+                    return true;
+                }
+            }
+        }
+        if ("respawn".equalsIgnoreCase(args[0])) {
+            if (sender.hasPermission("advancedslabs.respawn")) {
+                if (sender instanceof Player) {
+                    for (Entity entity : ((Player) sender).getNearbyEntities(16, 16, 16)) {
+                        IAdvancedSlab slab = plugin.slabManager.getSlabForEntity(entity);
+                        if (slab != null) {
+                            slab.refreshEntities();
+                            slab.respawnFallingBlock();
+                        }
+                    }
+                    sender.sendMessage(plugin.messages.getMessage("respawn"));
+                }
+            }
+        }
+        if ("reload".equalsIgnoreCase(args[0])) {
+            if (sender.hasPermission("advancedslabs.reload")) {
+                AdvancedSlabs.instance.reload();
+                sender.sendMessage("§aReloaded.");
+                return true;
+            }
+        }
+        if ("give".equalsIgnoreCase(args[0])) {
+            if (sender.hasPermission("advancedslabs.give")) {
+                if (args.length == 1) {
+                    sender.sendMessage("§a/aslab give <Material>[Data] [Player]");
+                    return false;
+                }
+                String materialString = args[1];
+                String dataString = "";
+                if (materialString.contains("[")) {
+                    String[] split = materialString.split("\\[");
+                    materialString = split[0];
+                    dataString = "[" + split[1];
+                }
+                Material material = null;
+                try {
+                    material = Material.matchMaterial(materialString);
+                } catch (Exception e) {
+                }
+                if (material == null) {
+                    sender.sendMessage(plugin.messages.getMessage("invalidMaterial", materialString));
+                    return false;
+                }
 
-				Player target;
-				if (args.length > 2) {
-					target = Bukkit.getPlayer(args[2]);
-					if (target == null || !target.isOnline()) {
-						sender.sendMessage(plugin.messages.getMessage("error.notOnline"));
-						return false;
-					}
-				} else {
-					if (!(sender instanceof Player)) {
-						sender.sendMessage("§cPlease specify the player");
-						return false;
-					}
-					target = (Player) sender;
-				}
+                Player target;
+                if (args.length > 2) {
+                    target = Bukkit.getPlayer(args[2]);
+                    if (target == null || !target.isOnline()) {
+                        sender.sendMessage(plugin.messages.getMessage("error.notOnline"));
+                        return false;
+                    }
+                } else {
+                    if (!(sender instanceof Player)) {
+                        sender.sendMessage("§cPlease specify the player");
+                        return false;
+                    }
+                    target = (Player) sender;
+                }
 
-				ItemStack slabBlock = new ItemStack(material, 1);
-				ItemMeta meta = slabBlock.getItemMeta();
-				meta.setDisplayName(AdvancedSlabs.instance.messages.getMessage("blockPrefix") + material.name() + (dataString.length() > 0 ? dataString : ""));
-				slabBlock.setItemMeta(meta);
+                ItemStack slabBlock = new ItemStack(material, 1);
+                ItemMeta meta = slabBlock.getItemMeta();
+                meta.setDisplayName(AdvancedSlabs.instance.messages.getMessage("blockPrefix") + material.name() + (dataString.length() > 0 ? dataString : ""));
+                slabBlock.setItemMeta(meta);
 //				try {
 //					slabBlock = new ItemBuilder(slabBlock).buildMeta().glow().item().build();
 //				} catch (Exception e) {
 //				}
 
-				target.getWorld().dropItemNaturally(target.getLocation(), slabBlock).setPickupDelay(0);
-				return true;
-			}
-		}
-		if ("pathspeed".equalsIgnoreCase(args[0])) {
-			if (sender.hasPermission("advancedslabs.pathspeed")) {
-				if (sender instanceof Player) {
-					if (!plugin.pathEditorManager.isEditing(((Player) sender).getUniqueId())) {
-						sender.sendMessage(plugin.messages.getMessage("editor.path.error.notEditing"));
-						return false;
-					}
-					if (args.length == 1) {
-						sender.sendMessage("§cPlease specify the speed");
-						return false;
-					}
-					ISlabPath path = plugin.pathEditorManager.getEditor(((Player) sender).getUniqueId()).path;
-					try {
-						double speed = Double.parseDouble(args[1]);
-						if (speed > PathEditor.MIN_SPEED && speed < PathEditor.MAX_SPEED) {
-							path.setSpeed(speed);
-							sender.sendMessage("§aSpeed changed to " + speed);
-						} else {
-							sender.sendMessage("§cSpecified number is too small or too big");
-							return false;
-						}
-					} catch (NumberFormatException e) {
-						sender.sendMessage("§cInvalid number: " + args[1]);
-						return false;
-					}
+                target.getWorld().dropItemNaturally(target.getLocation(), slabBlock).setPickupDelay(0);
+                return true;
+            }
+        }
+        if ("pathspeed".equalsIgnoreCase(args[0])) {
+            if (sender.hasPermission("advancedslabs.pathspeed")) {
+                if (sender instanceof Player) {
+                    if (!plugin.pathEditorManager.isEditing(((Player) sender).getUniqueId())) {
+                        sender.sendMessage(plugin.messages.getMessage("editor.path.error.notEditing"));
+                        return false;
+                    }
+                    if (args.length == 1) {
+                        sender.sendMessage("§cPlease specify the speed");
+                        return false;
+                    }
+                    ISlabPath path = plugin.pathEditorManager.getEditor(((Player) sender).getUniqueId()).path;
+                    try {
+                        double speed = Double.parseDouble(args[1]);
+                        if (speed > PathEditor.MIN_SPEED && speed < PathEditor.MAX_SPEED) {
+                            path.setSpeed(speed);
+                            sender.sendMessage("§aSpeed changed to " + speed);
+                        } else {
+                            sender.sendMessage("§cSpecified number is too small or too big");
+                            return false;
+                        }
+                    } catch (NumberFormatException e) {
+                        sender.sendMessage("§cInvalid number: " + args[1]);
+                        return false;
+                    }
+                }
+            }
+        }
+        if ("save".equalsIgnoreCase(args[0])) {
+            if (sender.hasPermission("advancedslabs.save")) {
+                sender.sendMessage("§eSaving Slabs...");
+                plugin.saveSlabs();
+                sender.sendMessage("§eSaving Paths...");
+                plugin.savePaths();
 
-				}
-			}
-		}
-		if ("save".equalsIgnoreCase(args[0])) {
-			if (sender.hasPermission("advancedslabs.save")) {
-				sender.sendMessage("§eSaving Slabs...");
-				plugin.saveSlabs();
-				sender.sendMessage("§eSaving Paths...");
-				plugin.savePaths();
+                sender.sendMessage("§aDone!");
+            }
+        }
 
-				sender.sendMessage("§aDone!");
-			}
-		}
+        return false;
+    }
 
-		return false;
-	}
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] args) {
+        List<String> list = new ArrayList<>();
 
-	@Override
-	public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] args) {
-		List<String> list = new ArrayList<>();
+        if (args.length <= 1) {
+            if (sender.hasPermission("advancedslabs.wand")) {
+                list.add("wand");
+            }
+            if (sender.hasPermission("advancedslabs.pathwand")) {
+                list.add("pathwand");
+            }
+            if (sender.hasPermission("advancedslabs.highlight")) {
+                list.add("highlight");
+            }
+            if (sender.hasPermission("advancedslabs.reload")) {
+                list.add("reload");
+            }
+            if (sender.hasPermission("advancedslabs.give")) {
+                list.add("give");
+            }
+        } else {
+            if ("give".equalsIgnoreCase(args[0])) {
+                if (sender.hasPermission("advancedslabs.give")) {
+                    for (Material material : Material.values()) {
+                        list.add(material.name());
+                    }
+                }
+            }
+        }
 
-		if (args.length <= 1) {
-			if (sender.hasPermission("advancedslabs.wand")) {
-				list.add("wand");
-			}
-			if (sender.hasPermission("advancedslabs.pathwand")) {
-				list.add("pathwand");
-			}
-			if (sender.hasPermission("advancedslabs.highlight")) {
-				list.add("highlight");
-			}
-			if (sender.hasPermission("advancedslabs.reload")) {
-				list.add("reload");
-			}
-			if (sender.hasPermission("advancedslabs.give")) {
-				list.add("give");
-			}
-		} else {
-			if ("give".equalsIgnoreCase(args[0])) {
-				if (sender.hasPermission("advancedslabs.give")) {
-					for (Material material : Material.values()) {
-						list.add(material.name());
-					}
-				}
-			}
-		}
-
-		return TabCompletionHelper.getPossibleCompletionsForGivenArgs(args, list.toArray(new String[list.size()]));
-	}
+        return TabCompletionHelper.getPossibleCompletionsForGivenArgs(args, list.toArray(new String[list.size()]));
+    }
 }
