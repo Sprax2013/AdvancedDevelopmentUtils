@@ -22,7 +22,7 @@ import java.util.UUID;
 
 @SuppressWarnings({"unused", "UnusedReturnValue", "WeakerAccess"})
 public class FakePlayer {
-    private GameProfile gp;
+    private final GameProfile gp;
     Location loc;
 
     Villager vill;

@@ -1,20 +1,5 @@
 package de.sprax2013.advanced_dev_utils.spigot.nick;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.ListenerPriority;
@@ -24,7 +9,6 @@ import com.comphenix.protocol.wrappers.EnumWrappers.PlayerInfoAction;
 import com.comphenix.protocol.wrappers.PlayerInfoData;
 import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import com.mojang.authlib.GameProfile;
-
 import de.sprax2013.advanced_dev_utils.misc.StringUtils;
 import de.sprax2013.advanced_dev_utils.mojang.MojangAPI;
 import de.sprax2013.advanced_dev_utils.spigot.Main;
@@ -32,277 +16,284 @@ import de.sprax2013.advanced_dev_utils.spigot.utils.BukkitServerUtils;
 import de.sprax2013.advanced_dev_utils.spigot.utils.GameProfileUtils;
 import de.sprax2013.advanced_dev_utils.spigot.utils.MCPacketUtils;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 // TODO Anti-TabComplete
 public class PlayerNick implements Listener {
-	static HashMap<UUID, GameProfile> playersNick = new HashMap<>();
+    static HashMap<UUID, GameProfile> playersNick = new HashMap<>();
 
-	private static ExecutorService pool = Executors.newCachedThreadPool();
+    private static final ExecutorService pool = Executors.newCachedThreadPool();
 
-	private final static PacketAdapter packetAdapter = new PacketAdapter(Main.getInstance(), ListenerPriority.HIGH,
-			PacketType.Play.Server.PLAYER_INFO, PacketType.Play.Server.TAB_COMPLETE) {
-		@Override
-		public void onPacketSending(PacketEvent e) {
-			if (!playersNick.isEmpty()) {
-				if (e.getPacket().getType() == PacketType.Play.Server.PLAYER_INFO) {
-					if (e.getPacket().getPlayerInfoAction().read(0) == PlayerInfoAction.ADD_PLAYER) {
-						for (int i = 0; i < e.getPacket().getPlayerInfoDataLists().size(); i++) {
-							List<PlayerInfoData> pInfoDataList = e.getPacket().getPlayerInfoDataLists().read(i);
-							List<PlayerInfoData> newList = new ArrayList<>();
+    private final static PacketAdapter packetAdapter = new PacketAdapter(Main.getInstance(), ListenerPriority.HIGH,
+            PacketType.Play.Server.PLAYER_INFO, PacketType.Play.Server.TAB_COMPLETE) {
+        @Override
+        public void onPacketSending(PacketEvent e) {
+            if (!playersNick.isEmpty()) {
+                if (e.getPacket().getType() == PacketType.Play.Server.PLAYER_INFO) {
+                    if (e.getPacket().getPlayerInfoAction().read(0) == PlayerInfoAction.ADD_PLAYER) {
+                        for (int i = 0; i < e.getPacket().getPlayerInfoDataLists().size(); i++) {
+                            List<PlayerInfoData> pInfoDataList = e.getPacket().getPlayerInfoDataLists().read(i);
+                            List<PlayerInfoData> newList = new ArrayList<>();
 
-							boolean atLeastOneNewEntry = false;
-							for (PlayerInfoData pInfoData : pInfoDataList) {
-								if (playersNick.containsKey(pInfoData.getProfile().getUUID())) {
-									newList.add(new PlayerInfoData(
-											WrappedGameProfile
-													.fromHandle(playersNick.get(pInfoData.getProfile().getUUID())),
-											pInfoData.getLatency(), pInfoData.getGameMode(),
-											pInfoData.getDisplayName()));
+                            boolean atLeastOneNewEntry = false;
+                            for (PlayerInfoData pInfoData : pInfoDataList) {
+                                if (playersNick.containsKey(pInfoData.getProfile().getUUID())) {
+                                    newList.add(new PlayerInfoData(
+                                            WrappedGameProfile
+                                                    .fromHandle(playersNick.get(pInfoData.getProfile().getUUID())),
+                                            pInfoData.getLatency(), pInfoData.getGameMode(),
+                                            pInfoData.getDisplayName()));
 
-									atLeastOneNewEntry = true;
-								} else {
-									newList.add(pInfoData);
-								}
+                                    atLeastOneNewEntry = true;
+                                } else {
+                                    newList.add(pInfoData);
+                                }
 
-								if (atLeastOneNewEntry) {
-									e.getPacket().getPlayerInfoDataLists().write(i, newList);
-								}
-							}
-						}
-					}
-				} else if (e.getPacket().getType() == PacketType.Play.Server.TAB_COMPLETE) {
-					List<String> newMatches = new ArrayList<>();
+                                if (atLeastOneNewEntry) {
+                                    e.getPacket().getPlayerInfoDataLists().write(i, newList);
+                                }
+                            }
+                        }
+                    }
+                } else if (e.getPacket().getType() == PacketType.Play.Server.TAB_COMPLETE) {
+                    List<String> newMatches = new ArrayList<>();
 
-					String[] matches = e.getPacket().getStringArrays().read(0);
-					@SuppressWarnings("deprecation")
-					String base = StringUtils.getStartingWith(matches, true).toLowerCase();
+                    String[] matches = e.getPacket().getStringArrays().read(0);
+                    @SuppressWarnings("deprecation")
+                    String base = StringUtils.getStartingWith(matches, true).toLowerCase();
 
-					if (matches.length == 1) {
-						base = Character.toString(base.charAt(0));
-					}
+                    if (matches.length == 1) {
+                        base = Character.toString(base.charAt(0));
+                    }
 
-					for (String match : matches) {
-						if (match.startsWith("/")) {
-							newMatches.add(match);
-						} else {
-							Player p = getPlayer(match);
+                    for (String match : matches) {
+                        if (match.startsWith("/")) {
+                            newMatches.add(match);
+                        } else {
+                            Player p = getPlayer(match);
 
-							if (p == null || !isNicked(p)) {
-								newMatches.add(match);
-							}
-						}
-					}
+                            if (p == null || !isNicked(p)) {
+                                newMatches.add(match);
+                            }
+                        }
+                    }
 
-					if (!base.trim().isEmpty()) {
-						for (String nick : getUsedNicks()) {
-							if (nick.toLowerCase().startsWith(base)) {
-								newMatches.add(nick);
-							}
-						}
-					}
+                    if (!base.trim().isEmpty()) {
+                        for (String nick : getUsedNicks()) {
+                            if (nick.toLowerCase().startsWith(base)) {
+                                newMatches.add(nick);
+                            }
+                        }
+                    }
 
-					e.getPacket().getStringArrays().write(0, newMatches.toArray(new String[0]));
-				}
-			}
-		}
-	};
+                    e.getPacket().getStringArrays().write(0, newMatches.toArray(new String[0]));
+                }
+            }
+        }
+    };
 
-	private static boolean protocolLibListener = false;
+    private static boolean protocolLibListener = false;
 
-	private static boolean bukkitListener = false;
+    private static boolean bukkitListener = false;
 
-	public static void nickPlayer(JavaPlugin plugin, Player p, UUID uuid, Runnable onFinish) {
-		registerListener();
+    @SuppressWarnings("unused")
+    public static void nickPlayer(JavaPlugin plugin, Player p, UUID uuid, Runnable onFinish) {
+        registerListener();
 
-		pool.execute(new Runnable() {
-			@Override
-			public void run() {
-				boolean success = true;
+        pool.execute(() -> {
+            boolean success = true;
 
-				switch (BukkitServerUtils.getBukkitVersion()) {
-				case "v1_8_R3":
-					v1_8_R3.nickPlayer(p, createDestProfile(p.getUniqueId(), uuid), createDestProfileForSelf(p, uuid));
-					break;
+            //noinspection SwitchStatementWithTooFewBranches
+            switch (BukkitServerUtils.getBukkitVersion()) {
+                case "v1_8_R3":
+                    v1_8_R3.nickPlayer(p, createDestProfile(p.getUniqueId(), uuid), createDestProfileForSelf(p, uuid));
+                    break;
 //				case "v1_12_R1":
 //					v1_12_R1.nickPlayer(p, createDestProfile(p.getUniqueId(), uuid), createDestProfileForSelf(p, uuid));
 //					break;
-				default:
-					success = false;
-					break;
-				}
+                default:
+                    success = false;
+                    break;
+            }
 
-				if (success && plugin != null && onFinish != null) {
-					Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new Runnable() {
-						@Override
-						public void run() {
-							Bukkit.getPluginManager().callEvent(new PlayerNickEvent(p));
+            if (success && plugin != null && onFinish != null) {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {
+                    Bukkit.getPluginManager().callEvent(new PlayerNickEvent(p));
 
-							onFinish.run();
-						}
-					});
-				} else if (plugin != null && onFinish != null) {
-					Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, onFinish);
-				}
-			}
-		});
-	}
+                    onFinish.run();
+                });
+            } else if (plugin != null && onFinish != null) {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, onFinish);
+            }
+        });
+    }
 
-	public static void unNickPlayer(JavaPlugin plugin, Player p, Runnable onFinish) {
-		registerListener();
+    @SuppressWarnings("unused")
+    public static void unNickPlayer(JavaPlugin plugin, Player p, Runnable onFinish) {
+        registerListener();
 
-		pool.execute(new Runnable() {
-			@Override
-			public void run() {
-				boolean success = true;
+        pool.execute(() -> {
+            boolean success = true;
 
-				switch (BukkitServerUtils.getBukkitVersion()) {
-				case "v1_8_R3":
-					v1_8_R3.unNickPlayer(p);
-					break;
+            //noinspection SwitchStatementWithTooFewBranches
+            switch (BukkitServerUtils.getBukkitVersion()) {
+                case "v1_8_R3":
+                    v1_8_R3.unNickPlayer(p);
+                    break;
 //				case "v1_12_R1":
 //					v1_12_R1.unNickPlayer(p);
 //					break;
-				default:
-					success = false;
-					break;
-				}
+                default:
+                    success = false;
+                    break;
+            }
 
-				if (success && plugin != null && onFinish != null) {
-					Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new Runnable() {
-						@Override
-						public void run() {
-							Bukkit.getPluginManager().callEvent(new PlayerUnNickEvent(p));
+            if (success && plugin != null && onFinish != null) {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {
+                    Bukkit.getPluginManager().callEvent(new PlayerUnNickEvent(p));
 
-							onFinish.run();
-						}
-					});
-				} else if (plugin != null && onFinish != null) {
-					Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, onFinish);
-				}
-			}
-		});
-	}
+                    onFinish.run();
+                });
+            } else if (plugin != null && onFinish != null) {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, onFinish);
+            }
+        });
+    }
 
-	/**
-	 * This method is used by the plugin 'SuperNick' by Sprax2013.<br>
-	 * It won't do nothing if it is called by another plugin!
-	 *
-	 * @param plugin The plugin
-	 * @param p      The player
-	 * @param uuid   The nick-UUID
-	 */
-	public static void nickPlayerWhileLogin(JavaPlugin plugin, Player p, UUID uuid, Runnable onFinish) {
-		registerListener();
+    /**
+     * This method is used by the plugin 'SuperNick' by Sprax2013.<br>
+     * It won't do nothing if it is called by another plugin!
+     *
+     * @param plugin The plugin
+     * @param p      The player
+     * @param uuid   The nick-UUID
+     */
+    @SuppressWarnings("unused")
+    public static void nickPlayerWhileLogin(JavaPlugin plugin, Player p, UUID uuid, Runnable onFinish) {
+        registerListener();
 
-		if (plugin != null && plugin.getName().equals("SuperNick")) {
-			playersNick.put(p.getUniqueId(), createDestProfile(p.getUniqueId(), uuid));
+        if (plugin != null && plugin.getName().equals("SuperNick")) {
+            playersNick.put(p.getUniqueId(), createDestProfile(p.getUniqueId(), uuid));
 
-			Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new Runnable() {
-				@Override
-				public void run() {
-					Bukkit.getPluginManager().callEvent(new PlayerNickEvent(p));
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {
+                Bukkit.getPluginManager().callEvent(new PlayerNickEvent(p));
 
-					if (onFinish != null) {
-						Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, onFinish);
-					}
-				}
-			});
-		}
-	}
+                if (onFinish != null) {
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, onFinish);
+                }
+            });
+        }
+    }
 
-	public static List<Player> getNickedPlayers() {
-		List<Player> list = new ArrayList<>();
+    public static List<Player> getNickedPlayers() {
+        List<Player> list = new ArrayList<>();
 
-		for (UUID uuid : playersNick.keySet()) {
-			list.add(Bukkit.getPlayer(uuid));
-		}
+        for (UUID uuid : playersNick.keySet()) {
+            list.add(Bukkit.getPlayer(uuid));
+        }
 
-		return list;
-	}
+        return list;
+    }
 
-	public static List<String> getUsedNicks() {
-		List<String> list = new ArrayList<>();
+    public static List<String> getUsedNicks() {
+        List<String> list = new ArrayList<>();
 
-		for (GameProfile gp : playersNick.values()) {
-			list.add(gp.getName());
-		}
+        for (GameProfile gp : playersNick.values()) {
+            list.add(gp.getName());
+        }
 
-		return list;
-	}
+        return list;
+    }
 
-	public static boolean isNicked(Player p) {
-		return playersNick.containsKey(p.getUniqueId());
-	}
+    public static boolean isNicked(Player p) {
+        return playersNick.containsKey(p.getUniqueId());
+    }
 
-	public static String getNick(Player p) {
-		GameProfile gp = playersNick.get(p.getUniqueId());
+    public static String getNick(Player p) {
+        GameProfile gp = playersNick.get(p.getUniqueId());
 
-		if (gp != null) {
-			return gp.getName();
-		}
+        if (gp != null) {
+            return gp.getName();
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	public static GameProfile getNicksGameProfile(Player p) {
-		if (isNicked(p)) {
-			return playersNick.get(p.getUniqueId());
-		}
+    @SuppressWarnings("unused")
+    public static GameProfile getNicksGameProfile(Player p) {
+        if (isNicked(p)) {
+            return playersNick.get(p.getUniqueId());
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	public static UUID getNickUUID(Player p) {
-		GameProfile gp = playersNick.get(p.getUniqueId());
+    @SuppressWarnings("unused")
+    public static UUID getNickUUID(Player p) {
+        GameProfile gp = playersNick.get(p.getUniqueId());
 
-		if (gp != null) {
-			return MojangAPI.getUUID(ChatColor.stripColor(gp.getName())).getUUID();
-		}
+        if (gp != null) {
+            return MojangAPI.getUUID(ChatColor.stripColor(gp.getName())).getUUID();
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	public static Player getPlayer(String name) {
-		Player p = Bukkit.getPlayerExact(name);
+    public static Player getPlayer(String name) {
+        Player p = Bukkit.getPlayerExact(name);
 
-		if (p == null) {
-			for (Player nicked : getNickedPlayers()) {
-				if (getNick(nicked).equalsIgnoreCase(name)) {
-					p = nicked;
-					break;
-				}
-			}
-		}
+        if (p == null) {
+            for (Player nicked : getNickedPlayers()) {
+                if (name.equalsIgnoreCase(getNick(nicked))) {
+                    p = nicked;
+                    break;
+                }
+            }
+        }
 
-		return p;
-	}
+        return p;
+    }
 
-	// TODO don't modify the GameProfile!! The cached Profile will change!
-	static GameProfile createDestProfile(UUID playerUUID, UUID uuid) {
-		GameProfile gp = GameProfileUtils.toGameProfile(uuid);
+    // TODO don't modify the GameProfile!! The cached Profile will change!
+    static GameProfile createDestProfile(UUID playerUUID, UUID uuid) {
+        GameProfile gp = GameProfileUtils.toGameProfile(uuid);
 
-		if (gp != null) {
-			MCPacketUtils.setValue(gp, "id", playerUUID);
-		}
+        if (gp != null) {
+            MCPacketUtils.setValue(gp, "id", playerUUID);
+        }
 
-		return gp;
-	}
+        return gp;
+    }
 
-	// TODO use "9a7d9d82-218c-4aed-ac47-89ff34f84b3e" for a non-Skin Player
-	/**
-	 * Creates a GameProfile containing Steve or Alex Skin in case the nick does not
-	 * have a skin.<br>
-	 * This prevents the own-client to display the original Skin.<br>
-	 * The original Skin would only be visible to himself. Other players would still
-	 * see Alex and Steve.<br>
-	 * <br>
-	 * Self will use a Skin. Others will use their default skin provided by their
-	 * texturepack instead.
-	 *
-	 * @return The GameProfile or null
-	 */
-	@SuppressWarnings("unused")
-	static GameProfile createDestProfileForSelf(Player p, UUID uuid) {
+    // TODO use "9a7d9d82-218c-4aed-ac47-89ff34f84b3e" for a non-Skin Player
+
+    /**
+     * Creates a GameProfile containing Steve or Alex Skin in case the nick does not
+     * have a skin.<br>
+     * This prevents the own-client to display the original Skin.<br>
+     * The original Skin would only be visible to himself. Other players would still
+     * see Alex and Steve.<br>
+     * <br>
+     * Self will use a Skin. Others will use their default skin provided by their
+     * texturepack instead.
+     *
+     * @return The GameProfile or null
+     */
+    @SuppressWarnings("unused")
+    static GameProfile createDestProfileForSelf(Player p, UUID uuid) {
 //		MojangProfile profile = MojangAPI.getProfile(uuid);
 
 //		if (!profile.hasTextureProp()) {
@@ -324,34 +315,34 @@ public class PlayerNick implements Listener {
 //			}
 //		}
 
-		return null;
-	}
+        return null;
+    }
 
-	static void sleep(long ms) {
-		try {
-			Thread.sleep(ms);
-		} catch (InterruptedException ex) {
-			ex.printStackTrace();
-		}
-	}
+    static void sleep(@SuppressWarnings("SameParameterValue") long ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
+    }
 
-	@EventHandler(priority = EventPriority.MONITOR)
-	private void onQuit(PlayerQuitEvent e) {
-		playersNick.remove(e.getPlayer().getUniqueId());
-	}
+    @EventHandler(priority = EventPriority.MONITOR)
+    private void onQuit(PlayerQuitEvent e) {
+        playersNick.remove(e.getPlayer().getUniqueId());
+    }
 
-	// Listener-Methods
-	private static void registerListener() {
-		if (!bukkitListener) {
-			Bukkit.getPluginManager().registerEvents(new PlayerNick(), Main.getInstance());
+    // Listener-Methods
+    private static void registerListener() {
+        if (!bukkitListener) {
+            Bukkit.getPluginManager().registerEvents(new PlayerNick(), Main.getInstance());
 
-			bukkitListener = true;
-		}
+            bukkitListener = true;
+        }
 
-		if (!protocolLibListener) {
-			ProtocolLibrary.getProtocolManager().addPacketListener(packetAdapter);
+        if (!protocolLibListener) {
+            ProtocolLibrary.getProtocolManager().addPacketListener(packetAdapter);
 
-			protocolLibListener = true;
-		}
-	}
+            protocolLibListener = true;
+        }
+    }
 }
