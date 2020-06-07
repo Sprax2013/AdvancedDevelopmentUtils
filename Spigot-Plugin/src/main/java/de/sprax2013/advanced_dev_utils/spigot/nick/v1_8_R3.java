@@ -5,6 +5,7 @@ import de.sprax2013.advanced_dev_utils.spigot.Main;
 import de.sprax2013.advanced_dev_utils.spigot.utils.MCPacketUtils;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
+import net.minecraft.server.v1_8_R3.PacketPlayOutEntityEquipment;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityHeadRotation;
 import net.minecraft.server.v1_8_R3.PacketPlayOutNamedEntitySpawn;
 import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
@@ -13,6 +14,7 @@ import net.minecraft.server.v1_8_R3.PacketPlayOutPosition;
 import net.minecraft.server.v1_8_R3.PacketPlayOutRespawn;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_8_R3.util.CraftChatMessage;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -82,15 +84,14 @@ public class v1_8_R3 {
             // Update Client-Side Inventory-Content
             p.updateInventory();
 
-            // Update Client-Side CurrentSlot
-            int oldSlot = p.getInventory().getHeldItemSlot();
-            if (oldSlot == 0) {
-                p.getInventory().setHeldItemSlot(1);
-            } else {
-                p.getInventory().setHeldItemSlot(0);
+            // Update Client-Side Item-In-Hand
+            Object packet = new PacketPlayOutEntityEquipment(p.getEntityId(), 0,
+                    CraftItemStack.asNMSCopy(p.getInventory().getItemInHand()));
+            for (Player inWorld : p.getWorld().getPlayers()) {
+                if (p != inWorld) {
+                    MCPacketUtils.sendPacket(inWorld, packet);
+                }
             }
-
-            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> p.getInventory().setHeldItemSlot(oldSlot));
         });
         // }
     }
@@ -153,15 +154,14 @@ public class v1_8_R3 {
             // Update Client-Side Inventory-Content
             p.updateInventory();
 
-            // Update Client-Side CurrentSlot
-            int oldSlot = p.getInventory().getHeldItemSlot();
-            if (oldSlot == 0) {
-                p.getInventory().setHeldItemSlot(1);
-            } else {
-                p.getInventory().setHeldItemSlot(0);
+            // Update Client-Side Item-In-Hand
+            Object packet = new PacketPlayOutEntityEquipment(p.getEntityId(), 0,
+                    CraftItemStack.asNMSCopy(p.getInventory().getItemInHand()));
+            for (Player inWorld : p.getWorld().getPlayers()) {
+                if (p != inWorld) {
+                    MCPacketUtils.sendPacket(inWorld, packet);
+                }
             }
-
-            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> p.getInventory().setHeldItemSlot(oldSlot));
         });
         // }
     }

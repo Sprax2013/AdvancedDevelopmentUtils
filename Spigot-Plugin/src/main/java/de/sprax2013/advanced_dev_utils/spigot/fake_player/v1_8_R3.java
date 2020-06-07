@@ -12,7 +12,7 @@ import net.minecraft.server.v1_8_R3.WorldSettings.EnumGamemode;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.util.CraftChatMessage;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.UUID;
 
 public class v1_8_R3 {
@@ -46,7 +46,7 @@ public class v1_8_R3 {
 
     static PacketPlayOutPlayerInfo createAddPlayerInfoPacket(GameProfile gp) {
         PacketPlayOutPlayerInfo packet = new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.ADD_PLAYER);
-        MCPacketUtils.setValue(packet, "b", Arrays.asList(
+        MCPacketUtils.setValue(packet, "b", Collections.singletonList(
                 packet.new PlayerInfoData(gp, 1, EnumGamemode.NOT_SET, CraftChatMessage.fromString(gp.getName())[0])));
 
         return packet;
@@ -54,7 +54,7 @@ public class v1_8_R3 {
 
     static PacketPlayOutPlayerInfo createRemovePlayerInfoPacket(GameProfile gp) {
         PacketPlayOutPlayerInfo packet = new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.REMOVE_PLAYER);
-        MCPacketUtils.setValue(packet, "b", Arrays.asList(
+        MCPacketUtils.setValue(packet, "b", Collections.singletonList(
                 packet.new PlayerInfoData(gp, 1, EnumGamemode.NOT_SET, CraftChatMessage.fromString(gp.getName())[0])));
 
         return packet;
