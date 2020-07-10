@@ -106,8 +106,6 @@ public class LocationUtils {
     }
 
     /**
-     * @param entity
-     *
      * @return CardinalDirectionEnum or null if failed (<code>null</code> is
      * impossible in 1.12.2 - Possible in other versions)
      *
