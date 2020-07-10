@@ -228,7 +228,7 @@ public class FakePlayerManager {
                                 }
                             });
                 }
-            }, 40, 40);
+            }, 20 * 2, 20 * 5);
 
             registered = true;
         }
