@@ -1,7 +1,8 @@
-# AdvancedDevelopmentUtils [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FSprax2013%2FAdvancedDevelopmentUtils.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FSprax2013%2FAdvancedDevelopmentUtils?ref=badge_shield)
+# AdvancedDevelopmentUtils (Discontinued)
 
-Very early Work In Progress state!!
+~~Very early Work In Progress state!!~~
 
 
-## License
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FSprax2013%2FAdvancedDevelopmentUtils.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FSprax2013%2FAdvancedDevelopmentUtils?ref=badge_large)
+**This project is no longer maintained and has been replaced by [LimeDevUtility](https://github.com/SpraxDev/LimeDevUtility).**
+
+It contains most features that *AdvancedDevelopmentUtils* provided, with some major improvements.
